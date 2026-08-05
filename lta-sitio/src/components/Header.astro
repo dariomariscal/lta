@@ -1,6 +1,6 @@
 ---
 // Header — barra sticky con navegación. Bajo 900px colapsa a menú desplegable.
-import Marca from '../assets/lta-marca.svg?raw';
+import Logo from './Logo.astro';
 const path = Astro.url.pathname;
 const links = [
   { href: '/', label: 'Inicio' },
@@ -14,7 +14,9 @@ const isActive = (href: string) =>
 
 <header class="site-head">
   <div class="site-head__in wrap">
-    <a class="brand" href="/" aria-label="LTA — Inicio" set:html={Marca} />
+    <a class="brand" href="/" aria-label="LTA — Inicio">
+      <Logo variant="mark" height={34} />
+    </a>
 
     <button
       class="nav-toggle mono"
@@ -61,7 +63,9 @@ const isActive = (href: string) =>
     top: 0;
     z-index: 50;
     height: 66px;
-    background: rgba(14, 14, 13, 0.94);
+    /* Velo del mismo off-white del fondo (250,248,244) — evita una banda de
+       blanco puro más brillante que el resto de la página al hacer scroll. */
+    background: rgba(250, 248, 244, 0.92);
     backdrop-filter: saturate(160%) blur(6px);
     border-bottom: 1px solid var(--line);
   }
@@ -74,16 +78,13 @@ const isActive = (href: string) =>
   .brand {
     display: flex;
     align-items: center;
-    color: var(--concrete);
-    transition: color var(--dur) var(--ease);
+    transition: opacity var(--dur) var(--ease);
   }
   .brand :global(svg) {
-    height: 30px;
-    width: auto;
     display: block;
   }
   .brand:hover {
-    color: #fff;
+    opacity: 0.82;
   }
   .nav {
     display: flex;
@@ -108,7 +109,7 @@ const isActive = (href: string) =>
   }
   .nav a.btn:hover {
     background: var(--red);
-    color: var(--concrete);
+    color: var(--on-red);
   }
   .nav-toggle {
     display: none;

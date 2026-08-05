@@ -31,7 +31,7 @@ const base = `/img/${image.sector}/${image.slug}`;
       </div>
     </div>
 
-    <figure class="hero__media" data-reveal>
+    <figure class="hero__media chamfer-photo" data-reveal>
       <img
         class="hero__img"
         src={`${base}-1600.webp`}
@@ -81,23 +81,22 @@ const base = `/img/${image.sector}/${image.slug}`;
     max-width: 640px;
   }
 
-  /* Panel de imagen: sin radius ni sombra, borde técnico y filete rojo arriba. */
+  /* Panel de imagen: foto biselada sobre panel rojo, como la portada del Book.
+     El rojo asoma en las esquinas cortadas → marco diagonal de marca. */
   .hero__media {
     position: relative;
     margin: 0;
     background: var(--ink-3);
-    border: 1px solid var(--line);
   }
-  .hero__media::before {
-    /* Filete rojo — misma lengua de marca que el triángulo del logo. */
+  /* Panel rojo de fondo, ligeramente mayor: se ve por los chaflanes de la foto. */
+  .hero__media::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 64px;
-    height: 4px;
+    inset: -3px;
     background: var(--red);
-    z-index: 1;
+    clip-path: polygon(var(--chamfer) 0, 100% 0, 100% calc(100% - var(--chamfer)),
+                       calc(100% - var(--chamfer)) 100%, 0 100%, 0 var(--chamfer));
+    z-index: -1;
   }
   .hero__img {
     display: block;

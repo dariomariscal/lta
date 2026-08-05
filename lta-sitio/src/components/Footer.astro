@@ -1,7 +1,7 @@
 ---
 // Footer — tres columnas: empresa, mapa del sitio, contacto. Barra con RFC.
 // Datos verificados de lta-docs/docs/02-contenido. RFC solo aquí, discreto.
-import Marca from '../assets/lta-marca.svg?raw';
+import Logo from './Logo.astro';
 const year = new Date().getFullYear();
 ---
 
@@ -9,11 +9,7 @@ const year = new Date().getFullYear();
   <div class="wrap grid8 site-foot__grid">
     <div class="site-foot__col site-foot__about">
       <a class="brand-foot" href="/" aria-label="LTA Construcción y Mantenimiento — Inicio">
-        <span class="brand-foot__mark" set:html={Marca} />
-        <span class="brand-foot__desc mono">
-          <span>Construcción</span>
-          <span>y Mantenimiento</span>
-        </span>
+        <Logo variant="lockup" height={92} />
       </a>
       <p class="body">
         LTA Construcción y Mantenimiento, unidad de Grupo Industrial LTA.
@@ -57,9 +53,24 @@ const year = new Date().getFullYear();
 
 <style>
   .site-foot {
+    position: relative;
     background: var(--ink-2);
     border-top: 1px solid var(--line);
     padding-top: var(--s6);
+  }
+  /* Franja de concreto con corte diagonal — remate superior tipo Book LTA.
+     Bloque gris que baja en ángulo desde el borde superior del pie. */
+  .site-foot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--s5);
+    background: var(--gray);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--diagonal)), 0 100%);
+    opacity: 0.28;
+    pointer-events: none;
   }
   .site-foot__grid {
     row-gap: var(--s4);
@@ -71,32 +82,15 @@ const year = new Date().getFullYear();
     grid-column: span 2;
   }
   .brand-foot {
-    display: inline-flex;
-    flex-direction: column;
-    gap: 10px;
-    color: var(--concrete);
+    display: inline-block;
     margin-bottom: var(--s3);
+    transition: opacity var(--dur) var(--ease);
   }
-  .brand-foot__mark :global(svg) {
-    height: 46px;
-    width: auto;
+  .brand-foot:hover {
+    opacity: 0.82;
+  }
+  .brand-foot :global(svg) {
     display: block;
-  }
-  /* Descriptor: barras rojas con texto claro, réplica del lockup impreso. */
-  .brand-foot__desc {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: flex-start;
-  }
-  .brand-foot__desc span {
-    background: var(--red);
-    color: var(--concrete);
-    font-size: 13px;
-    line-height: 1;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    padding: 5px 8px 4px;
   }
   .site-foot__about .body {
     color: var(--concrete-3);

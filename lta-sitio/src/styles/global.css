@@ -7,18 +7,27 @@
 
 /* -------- Tokens -------- */
 :root {
-  /* Color */
-  --ink:        #0E0E0D;   /* fondo principal */
-  --ink-2:      #171715;   /* pie de página, superficies elevadas */
-  --ink-3:      #1F1F1C;   /* fondo de contenedor de imagen */
-  --line:       #2E2E2B;   /* borde por defecto */
-  --line-2:     #43423E;   /* borde enfatizado */
-  --concrete:   #F2F0EC;   /* texto principal y fondo de banda clara */
-  --concrete-2: #C9C6C0;   /* texto de apoyo */
-  --concrete-3: #8C8A85;   /* texto terciario */
-  --concrete-4: #6E6C68;   /* etiquetas y metadatos */
-  --red:        #B03A28;   /* acento */
+  /* Color — esquema claro "Book LTA 2026": concreto claro de fondo, tinta negra,
+     rojo terracota como estructura. Los nombres se conservan (—ink = superficies
+     base, —concrete = tinta/texto) aunque su rol de luz esté invertido.
+
+     Confort visual (WCAG + guías de fatiga ocular): nunca blanco puro (#FFF) ni
+     negro puro (#000) en áreas grandes — el blanco puro deslumbra y cansa la
+     vista. El fondo es un off-white cálido; el texto un casi-negro. Contraste
+     texto/fondo ≈ 15:1 (AAA). Ver notas al pie de la sección de tokens. */
+  --ink:        #FAF8F4;   /* fondo principal — off-white cálido, no #FFF (glare) */
+  --ink-2:      #F1EEE8;   /* pie de página y superficies elevadas (concreto claro) */
+  --ink-3:      #E6E2DB;   /* fondo de contenedor de imagen (concreto medio) */
+  --line:       #D6D2CB;   /* borde por defecto */
+  --line-2:     #BBB7AF;   /* borde enfatizado */
+  --concrete:   #1A1A18;   /* texto principal y bloques oscuros — casi-negro, no #000 */
+  --concrete-2: #3C3B38;   /* texto de apoyo */
+  --concrete-3: #6E6C68;   /* texto terciario */
+  --concrete-4: #8C8A85;   /* etiquetas y metadatos */
+  --gray:       #8E8E90;   /* gris concreto de las franjas del Book */
+  --red:        #B03A28;   /* acento — rojo terracota LTA */
   --red-2:      #C8462F;   /* acento hover y eyebrow */
+  --on-red:     #FBFAF8;   /* texto sobre bloque rojo — blanco cálido, no #FFF puro */
 
   /* Espaciado — línea base de 8px, todo múltiplo de 8 */
   --s1: 8px;   --s2: 16px;  --s3: 24px;  --s4: 40px;
@@ -35,6 +44,12 @@
   --dur:      300ms;
   --dur-slow: 400ms;
   --ease:     cubic-bezier(.16, 1, .3, 1);
+
+  /* Geometría — lenguaje del "Book LTA 2026": chaflanes y cortes diagonales.
+     El chaflán es un corte a 45° de tamaño fijo; la diagonal es un ángulo suave. */
+  --chamfer:      24px;  /* corte de esquina de bloques y fotos */
+  --chamfer-lg:   40px;  /* corte grande para paneles del hero */
+  --diagonal:     56px;  /* desplazamiento del corte diagonal de banda/hero */
 }
 
 @media (max-width: 900px) {
@@ -142,8 +157,18 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
   .section-head__aside { grid-column: 1; }
 }
 
-/* -------- Numeral de sección (uno de los pocos usos del rojo) -------- */
-.numeral { color: var(--red); font-family: var(--font-mono); }
+/* -------- Numeral / etiqueta de sección -------- */
+/* Bloque rojo macizo con esquina chaflanada — la firma visual del Book LTA:
+   los rótulos "PRINCIPIOS", "SERVICIOS TÉCNICOS", "2026" van en cintillo rojo. */
+.numeral {
+  display: inline-block;
+  color: var(--on-red);
+  background: var(--red);
+  font-family: var(--font-mono);
+  padding: 6px 14px 5px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px),
+                     calc(100% - 10px) 100%, 0 100%);
+}
 
 /* -------- Superficies -------- */
 .surface { background: var(--ink-2); border: 1px solid var(--line); }
@@ -160,6 +185,40 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
   position: absolute; width: 1px; height: 1px;
   padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ============================================================================
+   Geometría del Book — chaflanes y cortes diagonales (clip-path).
+   clip-path convive con la regla de cero-radius: no son bordes redondeados,
+   son cortes rectos a 45°, coherentes con el brutalismo de la marca.
+   Con prefers-reduced-motion se conservan (son forma, no movimiento).
+   ========================================================================== */
+
+/* Chaflán en la esquina inferior derecha — el corte por defecto de los bloques
+   rojos de título del Book ("2026", "PRINCIPIOS"). */
+.chamfer-br {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer)),
+                     calc(100% - var(--chamfer)) 100%, 0 100%);
+}
+/* Chaflán en la esquina superior derecha — para bloques que "apuntan" a la foto. */
+.chamfer-tr {
+  clip-path: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer),
+                     100% 100%, 0 100%);
+}
+/* Foto biselada: dos esquinas opuestas cortadas, como las fotos del Book. */
+.chamfer-photo {
+  clip-path: polygon(var(--chamfer) 0, 100% 0, 100% calc(100% - var(--chamfer)),
+                     calc(100% - var(--chamfer)) 100%, 0 100%, 0 var(--chamfer));
+}
+/* Corte diagonal de banda: el lado derecho baja en ángulo (portada del Book). */
+.diagonal-r {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--diagonal)),
+                     0 100%);
+}
+
+@media (max-width: 900px) {
+  /* En móvil los chaflanes se achican para no comerse contenido estrecho. */
+  :root { --chamfer: 16px; --chamfer-lg: 24px; --diagonal: 32px; }
 }
 
 /* ============================================================================

@@ -14,7 +14,7 @@ const { num, title, text, image } = Astro.props;
 <article class="svc__item" data-reveal>
   {
     image && (
-      <div class="svc__media media-box">
+      <div class="svc__media media-box chamfer-photo">
         <Picture
           sector={image.sector}
           slug={image.slug}
@@ -35,7 +35,8 @@ const { num, title, text, image } = Astro.props;
 
 <style>
   .svc__item {
-    background: var(--ink);
+    background: var(--ink-2);
+    border: 1px solid var(--line);
     display: flex;
     flex-direction: column;
   }

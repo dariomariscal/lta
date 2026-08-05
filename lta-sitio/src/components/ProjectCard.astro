@@ -16,7 +16,7 @@ const { slug, cat, nombre, lugar, etiqueta, sector, imgSlug, alt } = Astro.props
 ---
 
 <a class="proj" data-proj-card data-cat={cat} data-reveal href={`/proyectos/${slug}`}>
-  <span class="proj__media media-box">
+  <span class="proj__media media-box chamfer-photo">
     <Picture sector={sector} slug={imgSlug} alt={alt} width={800} height={533} class="proj__img" />
   </span>
   <h3 class="proj__title">{nombre}</h3>

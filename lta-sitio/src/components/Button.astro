@@ -24,20 +24,23 @@ const { href, variant = 'default', class: cls = '' } = Astro.props;
   }
   .btn--default:hover {
     background: var(--red);
+    color: var(--on-red);
   }
   .btn--solid {
     background: var(--red);
+    color: var(--on-red);
   }
   .btn--solid:hover {
     background: var(--red-2);
     border-color: var(--red-2);
   }
+  /* Variante tinta: borde/relleno negro sobre fondo claro. */
   .btn--dark {
-    border-color: var(--ink);
-    color: var(--ink);
+    border-color: var(--concrete);
+    color: var(--concrete);
   }
   .btn--dark:hover {
-    background: var(--ink);
-    color: var(--concrete);
+    background: var(--concrete);
+    color: var(--ink);
   }
 </style>
