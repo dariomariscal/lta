@@ -23,10 +23,20 @@ const pathname = Astro.url.pathname;
     gap: var(--s4);
   }
   .nav-desk a {
+    /* Mismo carácter fuerte que los enlaces del menú móvil (.display):
+       tipografía condensada display con peso bold, a tamaño de barra. */
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.01em;
     color: var(--concrete-2);
     transition: color var(--dur) var(--ease);
   }
-  .nav-desk a:hover,
+  /* El CTA se excluye: tiene su propio hover (fondo rojo + texto claro). Sin
+     esta exclusión, este `color: red` empataría en especificidad con el del
+     botón y, según el orden de fuente, podía pintar texto rojo sobre fondo
+     rojo — ilegible. */
+  .nav-desk a:not(.nav-desk__cta):hover,
   .nav-desk a[aria-current='page'] {
     color: var(--red-2);
   }
