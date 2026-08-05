@@ -13,8 +13,15 @@ interface Props {
 
 const { title, description, preloadImage } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/img/brand/og-image.png', Astro.site).href;
+// Base absoluta para URLs de metadatos (canonical, og:image, og:url).
+// En producción usamos Astro.site (dominio canónico, ideal para SEO). En
+// desarrollo/preview usamos Astro.url.origin —el origen REAL de la request— para
+// que og:image y og:url apunten al host donde de verdad se está sirviendo el
+// sitio (p. ej. http://localhost:4321) y las previsualizaciones carguen la
+// imagen local en vez de quedar clavadas en grupolta.com.
+const siteBase = import.meta.env.DEV ? new URL(Astro.url.origin) : (Astro.site ?? new URL(Astro.url.origin));
+const canonical = new URL(Astro.url.pathname, siteBase).href;
+const ogImage = new URL('/img/brand/og-image.png', siteBase).href;
 ---
 
 <!doctype html>
