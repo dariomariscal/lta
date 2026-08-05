@@ -1,0 +1,16 @@
+{
+  "orden": 14,
+  "nombre": "Muros de tablaroca",
+  "lugar": "Ciudad de México",
+  "cat": "instalaciones",
+  "etiqueta": "Instalaciones",
+  "alcance": "Estructura, tablaroca y aislamiento",
+  "cta": "Cotizar muros y plafones",
+  "sector": "04-instalaciones",
+  "fotos": [
+    "muros-tablaroca_nave-aislamiento-charolas",
+    "muros-tablaroca_estructura-soldada-bastidor",
+    "muros-tablaroca_estructura-metalica-roja"
+  ],
+  "texto": "Montaje de muros de tablaroca de gran altura sobre estructura metálica, con aislamiento térmico y coordinación con charolas portacables e instalaciones expuestas antes del cierre."
+}

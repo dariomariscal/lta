@@ -1,0 +1,201 @@
+/* ============================================================================
+   LTA · Sistema de diseño
+   Brutalismo disciplinado con capa técnica. Ver lta-docs/docs/03-sistema-diseno.
+   Reglas duras: cero radius, cero sombras, cero degradados (salvo velo del hero),
+   un solo acento rojo, nunca blanco puro, todo espaciado múltiplo de 8.
+   ========================================================================== */
+
+/* -------- Tokens -------- */
+:root {
+  /* Color */
+  --ink:        #0E0E0D;   /* fondo principal */
+  --ink-2:      #171715;   /* pie de página, superficies elevadas */
+  --ink-3:      #1F1F1C;   /* fondo de contenedor de imagen */
+  --line:       #2E2E2B;   /* borde por defecto */
+  --line-2:     #43423E;   /* borde enfatizado */
+  --concrete:   #F2F0EC;   /* texto principal y fondo de banda clara */
+  --concrete-2: #C9C6C0;   /* texto de apoyo */
+  --concrete-3: #8C8A85;   /* texto terciario */
+  --concrete-4: #6E6C68;   /* etiquetas y metadatos */
+  --red:        #B03A28;   /* acento */
+  --red-2:      #C8462F;   /* acento hover y eyebrow */
+
+  /* Espaciado — línea base de 8px, todo múltiplo de 8 */
+  --s1: 8px;   --s2: 16px;  --s3: 24px;  --s4: 40px;
+  --s5: 64px;  --s6: 104px; --s7: 168px;
+  --margin: 64px;
+  --maxw: 1440px;
+
+  /* Tipografía */
+  --font-display: 'Barlow Condensed', system-ui, sans-serif;
+  --font-body:    'Archivo', system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Movimiento */
+  --dur:      300ms;
+  --dur-slow: 400ms;
+  --ease:     cubic-bezier(.16, 1, .3, 1);
+}
+
+@media (max-width: 900px) {
+  :root { --margin: 24px; --s6: 72px; }
+}
+
+/* -------- Reset acotado -------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--concrete);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img, picture, svg, video { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+ul, ol { list-style: none; padding: 0; }
+input, select, textarea { font: inherit; color: inherit; }
+
+/* Cero radius en absolutamente todo */
+* { border-radius: 0 !important; }
+
+/* -------- Tipografía: familias y escala -------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: .96;
+  letter-spacing: -.012em;
+  text-transform: uppercase;
+}
+
+h1.display { font-size: clamp(40px, 6.6vw, 84px); }
+h2.display { font-size: clamp(34px, 5.8vw, 76px); }
+h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
+
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: .98;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  font-size: clamp(36px, 5.4vw, 68px);
+}
+
+.lede {
+  font-size: clamp(17px, 1.5vw, 21px);
+  line-height: 1.55;
+  color: var(--concrete-2);
+  max-width: 60ch;
+}
+
+.body { font-size: 16px; line-height: 1.6; max-width: 66ch; }
+
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.eyebrow { color: var(--red-2); }
+
+/* -------- Layout: envoltura y retícula de 8 columnas -------- */
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+
+.grid8 {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: var(--s3);
+}
+
+.section {
+  padding-block: var(--s6);
+  border-top: 1px solid var(--line);
+}
+
+.section--flush { border-top: 0; }
+
+/* Encabezado de sección: título 5 col + apoyo 3 col */
+.section-head { margin-bottom: var(--s5); }
+.section-head__title { grid-column: span 5; }
+.section-head__aside { grid-column: span 3; align-self: end; }
+
+@media (max-width: 900px) {
+  .grid8 { grid-template-columns: 1fr; }
+  .section-head__title,
+  .section-head__aside { grid-column: 1; }
+}
+
+/* -------- Numeral de sección (uno de los pocos usos del rojo) -------- */
+.numeral { color: var(--red); font-family: var(--font-mono); }
+
+/* -------- Superficies -------- */
+.surface { background: var(--ink-2); border: 1px solid var(--line); }
+.media-box { background: var(--ink-3); display: block; overflow: hidden; }
+
+/* -------- Foco visible (obligatorio, no eliminar) -------- */
+:focus-visible {
+  outline: 2px solid var(--red-2);
+  outline-offset: 3px;
+}
+
+/* -------- Utilidades -------- */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ============================================================================
+   Animación — brutalismo cinético (GSAP + Lenis)
+   Estados iniciales en CSS para evitar parpadeo (FOUC) antes de que corra el JS.
+   El JS los anima; con prefers-reduced-motion se saltan y quedan visibles.
+   ========================================================================== */
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Revelado de texto por líneas: la línea se oculta tras una máscara y sube */
+[data-reveal-text] .line-inner { display: inline-block; will-change: transform; }
+
+/* Revelado de bloque (tarjetas, párrafos): fade + subida */
+[data-reveal] { opacity: 0; transform: translateY(24px); will-change: transform, opacity; }
+
+/* Revelado de imagen con barrido clip-path (destape recto, brutalista) */
+[data-reveal-img] { clip-path: inset(0 0 100% 0); will-change: clip-path; }
+
+/* Line-mask para specs: la fila sube tras la regla del plano */
+[data-reveal-spec] .spec__v { opacity: 0; transform: translateY(8px); }
+
+/* prefers-reduced-motion: todo visible, sin transformaciones */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  [data-reveal],
+  [data-reveal-text] .line-inner,
+  [data-reveal-spec] .spec__v { opacity: 1 !important; transform: none !important; }
+  [data-reveal-img] { clip-path: none !important; }
+  .marquee__track { animation: none !important; }
+}

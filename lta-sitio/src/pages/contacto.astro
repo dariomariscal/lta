@@ -1,0 +1,108 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ContactForm from '@components/ContactForm.astro';
+import SpecList from '@components/SpecList.astro';
+import ImageBand from '@components/ImageBand.astro';
+---
+
+<BaseLayout
+  title="Contacto · LTA Construcción y Mantenimiento"
+  description="Cuéntanos qué necesitas. Respondemos en 24 horas hábiles. Visita técnica sin costo dentro de nuestras zonas de cobertura."
+>
+  <!-- 01 · Encabezado -->
+  <section class="section section--flush page-hero">
+    <div class="wrap">
+      <p class="mono eyebrow">Contacto</p>
+      <h1 class="page-title" data-reveal-text>Cuéntanos qué necesitas.</h1>
+      <p class="lede" data-reveal>
+        Respondemos en 24 horas hábiles. La visita técnica no tiene costo dentro
+        de nuestras zonas de cobertura.
+      </p>
+    </div>
+  </section>
+
+  <!-- 02 · Formulario + vías directas -->
+  <section class="section" aria-label="Formulario y datos de contacto">
+    <div class="wrap grid8">
+      <div class="contacto__form" data-reveal>
+        <ContactForm />
+      </div>
+
+      <aside class="contacto__aside" data-reveal>
+        <div class="contacto__block">
+          <p class="mono numeral">Vías directas</p>
+          <SpecList
+            rows={[
+              { k: 'Nuevos proyectos', v: 'contacto@grupolta.com' },
+              { k: 'Clientes actuales', v: 'servicioacliente@grupolta.com' },
+              { k: 'Oficina', v: '55 8951 0107' },
+              { k: 'Oficina', v: '55 8951 0108' },
+              { k: 'WhatsApp', v: '55 8951 0107' },
+            ]}
+          />
+        </div>
+
+        <div class="contacto__block">
+          <p class="mono numeral">Horario y ubicación</p>
+          <SpecList
+            rows={[
+              { k: 'Lun–Viernes', v: '9:00 – 19:00' },
+              { k: 'Sábado', v: '9:00 – 13:00' },
+              { k: 'Base', v: 'Ciudad de México' },
+            ]}
+          />
+        </div>
+
+        <!-- 03 · Dirección general y cobertura -->
+        <div class="contacto__block">
+          <p class="mono numeral">Dirección y cobertura</p>
+          <SpecList
+            rows={[
+              { k: 'Director Gral.', v: 'Ing. Alfonso Téllez Patiño' },
+              { k: 'Cobertura', v: 'Toda la República' },
+              { k: 'Presencia', v: 'Centro, Veracruz y Sureste' },
+            ]}
+          />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 04 · Banda de cierre -->
+  <ImageBand
+    sector="01-infraestructura-carretera"
+    slug="michoacan_vista-aerea-ampliacion"
+    alt="Vista aérea de la ampliación del cuerpo carretero en Michoacán"
+    tag="Modernización carretera · Michoacán"
+  />
+</BaseLayout>
+
+<style>
+  .page-hero {
+    padding-top: var(--s7);
+  }
+  .page-hero .lede {
+    margin-top: var(--s3);
+  }
+  .contacto__form {
+    grid-column: span 4;
+  }
+  .contacto__aside {
+    grid-column: span 4;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s4);
+  }
+  .contacto__block .numeral {
+    margin-bottom: var(--s2);
+  }
+  @media (max-width: 900px) {
+    .contacto__form,
+    .contacto__aside {
+      grid-column: 1;
+    }
+    .contacto__aside {
+      margin-top: var(--s5);
+    }
+  }
+</style>

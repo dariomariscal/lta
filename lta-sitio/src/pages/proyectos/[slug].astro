@@ -1,0 +1,243 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Picture from '@components/Picture.astro';
+import SpecList from '@components/SpecList.astro';
+import Button from '@components/Button.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('proyectos');
+  const ordenadas = entries.sort((a, b) => a.data.orden - b.data.orden);
+
+  // Slug limpio: quita el prefijo numérico del id (05-hotel-ava-cancun → hotel-ava-cancun)
+  const slugDe = (id: string) => id.replace(/^\d+-/, '');
+
+  return ordenadas.map((entry, i) => {
+    const prev = ordenadas[(i - 1 + ordenadas.length) % ordenadas.length];
+    const next = ordenadas[(i + 1) % ordenadas.length];
+    return {
+      params: { slug: slugDe(entry.id) },
+      props: {
+        p: entry.data,
+        prev: { slug: slugDe(prev.id), nombre: prev.data.nombre },
+        next: { slug: slugDe(next.id), nombre: next.data.nombre },
+      },
+    };
+  });
+}
+
+const { p, prev, next } = Astro.props;
+const principal = p.fotos[0];
+const galeria = p.fotos.slice(1);
+---
+
+<BaseLayout
+  title={`${p.nombre} · ${p.etiqueta} · LTA`}
+  description={p.texto.slice(0, 155)}
+  preloadImage={`/img/${p.sector}/${principal}-1600.webp`}
+>
+  <!-- Migaja + volver -->
+  <section class="section section--flush proj-top">
+    <div class="wrap">
+      <a class="mono proj-back" href="/proyectos">‹ Todos los proyectos</a>
+    </div>
+  </section>
+
+  <!-- Encabezado del caso -->
+  <section class="section section--flush proj-head">
+    <div class="wrap grid8">
+      <div class="proj-head__title">
+        <p class="mono eyebrow">{p.etiqueta}</p>
+        <h1 class="page-title" data-reveal-text>{p.nombre}</h1>
+      </div>
+      <div class="proj-head__spec" data-reveal>
+        <SpecList
+          rows={[
+            { k: 'Ubicación', v: p.lugar },
+            { k: 'Sector', v: p.etiqueta },
+            { k: 'Alcance', v: p.alcance },
+          ]}
+          animate
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Foto principal a lo ancho -->
+  <section class="section section--flush proj-hero">
+    <div class="wrap">
+      <Picture
+        sector={p.sector}
+        slug={principal}
+        alt={`${p.nombre} — ${p.etiqueta}, ${p.lugar}`}
+        width={1600}
+        height={1000}
+        sizes="(max-width:1440px) 92vw, 1312px"
+        eager
+        reveal
+        class="proj-hero__img media-box"
+      />
+    </div>
+  </section>
+
+  <!-- Texto de alcance -->
+  <section class="section" aria-label="Descripción del proyecto">
+    <div class="wrap grid8">
+      <h2 class="display proj-body__h" data-reveal-text>El trabajo</h2>
+      <p class="lede proj-body__text" data-reveal>{p.texto}</p>
+    </div>
+  </section>
+
+  <!-- Galería -->
+  {
+    galeria.length > 0 && (
+      <section class="section" aria-label="Galería del proyecto">
+        <div class="wrap">
+          <div class="proj-gallery" data-reveal-group>
+            {galeria.map((f) => (
+              <Picture
+                sector={p.sector}
+                slug={f}
+                alt={`${p.nombre} — detalle de obra`}
+                width={1000}
+                height={667}
+                sizes="(max-width:900px) 92vw, 46vw"
+                reveal
+                class="proj-gallery__img media-box"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- CTA contextual -->
+  <section class="section proj-cta">
+    <div class="wrap proj-cta__in">
+      <h2 class="display" data-reveal-text>¿Tienes una obra parecida?</h2>
+      <Button href="/contacto" variant="solid">{p.cta}</Button>
+    </div>
+  </section>
+
+  <!-- Navegación prev / next -->
+  <nav class="section proj-nav" aria-label="Otros proyectos">
+    <div class="wrap proj-nav__in">
+      <a class="proj-nav__link proj-nav__prev" href={`/proyectos/${prev.slug}`}>
+        <span class="mono proj-nav__dir">‹ Anterior</span>
+        <span class="proj-nav__name">{prev.nombre}</span>
+      </a>
+      <a class="proj-nav__link proj-nav__next" href={`/proyectos/${next.slug}`}>
+        <span class="mono proj-nav__dir">Siguiente ›</span>
+        <span class="proj-nav__name">{next.nombre}</span>
+      </a>
+    </div>
+  </nav>
+</BaseLayout>
+
+<style>
+  .proj-top {
+    padding-top: var(--s5);
+    padding-bottom: 0;
+  }
+  .proj-back {
+    color: var(--concrete-3);
+    transition: color var(--dur) var(--ease);
+  }
+  .proj-back:hover {
+    color: var(--red-2);
+  }
+  .proj-head {
+    padding-top: var(--s4);
+  }
+  .proj-head__title {
+    grid-column: span 5;
+  }
+  .proj-head__spec {
+    grid-column: span 3;
+    align-self: end;
+  }
+  .proj-hero {
+    padding-top: var(--s5);
+  }
+  .proj-hero__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+  .proj-body__h {
+    grid-column: span 2;
+  }
+  .proj-body__text {
+    grid-column: span 6;
+    max-width: 60ch;
+    color: var(--concrete-2);
+  }
+  .proj-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s3);
+  }
+  .proj-gallery__img {
+    width: 100%;
+    height: auto;
+  }
+  .proj-cta__in {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s3);
+    text-align: center;
+  }
+  .proj-nav {
+    border-top: 1px solid var(--line);
+  }
+  .proj-nav__in {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s3);
+  }
+  .proj-nav__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s1);
+    transition: color var(--dur) var(--ease);
+  }
+  .proj-nav__next {
+    text-align: right;
+    align-items: flex-end;
+  }
+  .proj-nav__dir {
+    color: var(--concrete-4);
+  }
+  .proj-nav__name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(20px, 2.4vw, 30px);
+    line-height: 1.05;
+  }
+  .proj-nav__link:hover .proj-nav__name {
+    color: var(--red-2);
+  }
+
+  @media (max-width: 900px) {
+    .proj-head__title,
+    .proj-head__spec {
+      grid-column: 1;
+    }
+    .proj-head__spec {
+      margin-top: var(--s3);
+    }
+    .proj-body__h,
+    .proj-body__text {
+      grid-column: 1;
+    }
+    .proj-body__h {
+      margin-bottom: var(--s2);
+    }
+    .proj-gallery {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

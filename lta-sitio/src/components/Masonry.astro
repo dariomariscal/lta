@@ -1,0 +1,53 @@
+---
+// Masonry — mosaico de proceso. columns:3 respeta la proporción original de
+// cada foto y crea ritmo irregular. 900px → 2 columnas.
+import Picture from './Picture.astro';
+interface Props {
+  items: { sector: string; slug: string; alt: string; width: number; height: number }[];
+}
+const { items } = Astro.props;
+---
+
+<div class="mosaic">
+  {
+    items.map((it) => (
+      <div class="mosaic__item">
+        <Picture
+          sector={it.sector}
+          slug={it.slug}
+          alt={it.alt}
+          width={it.width}
+          height={it.height}
+          sizes="(max-width:900px) 46vw, 30vw"
+          reveal
+          class="mosaic__img media-box"
+        />
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .mosaic {
+    columns: 3;
+    column-gap: var(--s2);
+  }
+  .mosaic__item {
+    break-inside: avoid;
+    margin-bottom: var(--s2);
+  }
+  .mosaic__img {
+    width: 100%;
+    height: auto;
+    filter: grayscale(0.3) contrast(1.03);
+    transition: filter var(--dur-slow) var(--ease);
+  }
+  .mosaic__img:hover {
+    filter: grayscale(0);
+  }
+  @media (max-width: 900px) {
+    .mosaic {
+      columns: 2;
+    }
+  }
+</style>

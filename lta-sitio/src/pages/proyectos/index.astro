@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ProjectFilters from '@components/ProjectFilters.astro';
+import ProjectCard from '@components/ProjectCard.astro';
+import Button from '@components/Button.astro';
+
+const entries = (await getCollection('proyectos')).sort(
+  (a, b) => a.data.orden - b.data.orden,
+);
+const slugDe = (id: string) => id.replace(/^\d+-/, '');
+---
+
+<BaseLayout
+  title="Proyectos · Obra ejecutada en nueve estados · LTA"
+  description="Portafolio de obra: infraestructura carretera, hotelería, retail, instalaciones, mantenimiento y topografía. Filtra por sector para ver casos parecidos al tuyo."
+>
+  <!-- 01 · Encabezado + filtros -->
+  <section class="section section--flush page-hero">
+    <div class="wrap">
+      <p class="mono eyebrow">Proyectos</p>
+      <h1 class="page-title" data-reveal-text>Obra ejecutada en nueve estados.</h1>
+      <p class="lede" data-reveal>
+        Infraestructura carretera, hotelería, retail, instalaciones, mantenimiento
+        y servicios topográficos. Filtra por sector para ver casos parecidos al tuyo.
+      </p>
+      <div class="proj-filters" data-reveal>
+        <ProjectFilters total={entries.length} />
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Retícula: cada tarjeta enlaza a su página dedicada -->
+  <section class="section" aria-label="Portafolio de proyectos">
+    <div class="wrap">
+      <div class="proj-grid" data-proj-grid data-reveal-group>
+        {
+          entries.map(({ id, data: p }) => (
+            <ProjectCard
+              slug={slugDe(id)}
+              cat={p.cat}
+              nombre={p.nombre}
+              lugar={p.lugar}
+              etiqueta={p.etiqueta}
+              sector={p.sector}
+              imgSlug={p.fotos[0]}
+              alt={`${p.nombre} — ${p.etiqueta}, ${p.lugar}`}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · CTA de cierre -->
+  <section class="section section-cta">
+    <div class="wrap section-cta__in">
+      <h2 class="display" data-reveal-text>¿Tienes una obra parecida?</h2>
+      <Button href="/contacto" variant="solid">Solicitar cotización</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    padding-top: var(--s7);
+  }
+  .page-hero .lede {
+    margin-top: var(--s3);
+  }
+  .proj-filters {
+    margin-top: var(--s4);
+  }
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s4) var(--s3);
+    align-items: start;
+  }
+  .section-cta__in {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s3);
+    text-align: center;
+  }
+  @media (max-width: 900px) {
+    .proj-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

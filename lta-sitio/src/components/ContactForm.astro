@@ -1,0 +1,97 @@
+---
+// ContactForm — 5 campos. Campos sin caja (solo border-bottom). Formspree.
+// ⚠️ Sustituir TU_ID por el ID real antes de publicar (docs/08, docs/09).
+---
+
+<form class="form" action="https://formspree.io/f/TU_ID" method="POST">
+  <div class="form__field">
+    <label class="mono" for="nombre">Nombre *</label>
+    <input id="nombre" name="nombre" type="text" required placeholder="Nombre y apellido" />
+  </div>
+
+  <div class="form__field">
+    <label class="mono" for="empresa">Empresa</label>
+    <input id="empresa" name="empresa" type="text" placeholder="Nombre de la empresa" />
+  </div>
+
+  <div class="form__field">
+    <label class="mono" for="contacto">Teléfono o correo *</label>
+    <input id="contacto" name="contacto" type="text" required placeholder="Cómo te contactamos" />
+  </div>
+
+  <div class="form__field">
+    <label class="mono" for="tipo">Tipo de proyecto</label>
+    <select id="tipo" name="tipo">
+      <option value="">Selecciona una opción</option>
+      <option>Obra civil o carretera</option>
+      <option>Acabados y albañilería</option>
+      <option>Instalaciones</option>
+      <option>Obra comercial</option>
+      <option>Mantenimiento</option>
+      <option>Topografía o servicios profesionales</option>
+    </select>
+  </div>
+
+  <div class="form__field">
+    <label class="mono" for="ubicacion">Ubicación de la obra</label>
+    <input id="ubicacion" name="ubicacion" type="text" placeholder="Ciudad y estado" />
+  </div>
+
+  <button class="btn btn--solid mono form__submit" type="submit">Enviar solicitud</button>
+  <p class="mono form__note">Respondemos en 24 horas hábiles.</p>
+</form>
+
+<style>
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s3);
+  }
+  .form__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s1);
+  }
+  .form__field label {
+    color: var(--concrete-4);
+  }
+  .form__field input,
+  .form__field select {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line-2);
+    padding: 10px 0;
+    color: var(--concrete);
+    transition: border-color var(--dur) var(--ease);
+  }
+  .form__field input::placeholder {
+    color: var(--concrete-4);
+  }
+  .form__field input:focus,
+  .form__field select:focus {
+    outline: none;
+    border-bottom-color: var(--red-2);
+  }
+  .form__field select option {
+    background: var(--ink);
+    color: var(--concrete);
+  }
+  .btn {
+    padding: 11px 22px;
+    border: 1px solid var(--red);
+  }
+  .btn--solid {
+    background: var(--red);
+  }
+  .btn--solid:hover {
+    background: var(--red-2);
+    border-color: var(--red-2);
+  }
+  .form__submit {
+    align-self: flex-start;
+    margin-top: var(--s1);
+  }
+  .form__note {
+    color: var(--concrete-4);
+  }
+</style>

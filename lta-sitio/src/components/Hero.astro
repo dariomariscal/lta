@@ -1,0 +1,127 @@
+---
+// Hero — layout dividido: texto a la izquierda, imagen a la derecha. En móvil
+// la imagen pasa arriba y el texto abajo. Text reveal con máscara en el titular.
+// Franja de estadísticas en mono. Un solo CTA primario.
+import Button from './Button.astro';
+import SpecList from './SpecList.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  sub: string;
+  image: { sector: string; slug: string; alt: string };
+  cta: { href: string; label: string };
+  stats: { k: string; v: string }[];
+}
+const { eyebrow, title, sub, image, cta, stats } = Astro.props;
+const base = `/img/${image.sector}/${image.slug}`;
+---
+
+<section class="hero">
+  <div class="hero__in wrap">
+    <div class="hero__copy">
+      <span class="mono eyebrow">{eyebrow}</span>
+      <h1 class="display hero__title" data-reveal-text>{title}</h1>
+      <p class="lede hero__sub" data-reveal>{sub}</p>
+      <div class="hero__cta" data-reveal>
+        <Button href={cta.href} variant="solid">{cta.label}</Button>
+      </div>
+      <div class="hero__stats">
+        <SpecList rows={stats} animate />
+      </div>
+    </div>
+
+    <figure class="hero__media" data-reveal>
+      <img
+        class="hero__img"
+        src={`${base}-1600.webp`}
+        srcset={`${base}-800.webp 800w, ${base}-1600.webp 1600w`}
+        sizes="(max-width: 900px) 100vw, 48vw"
+        width="1563"
+        height="886"
+        alt={image.alt}
+        fetchpriority="high"
+        decoding="async"
+      />
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--s6) var(--s5);
+    overflow: hidden;
+  }
+  .hero__in {
+    display: grid;
+    grid-template-columns: 1fr 48%;
+    gap: var(--s5);
+    align-items: center;
+  }
+  .hero__copy {
+    /* La columna de texto no se estira más de lo cómodo de leer. */
+    max-width: 640px;
+  }
+  .eyebrow {
+    display: block;
+    margin-bottom: var(--s2);
+  }
+  .hero__title {
+    margin-bottom: var(--s3);
+  }
+  .hero__sub {
+    max-width: 52ch;
+    margin-bottom: var(--s4);
+    color: var(--concrete-2);
+  }
+  .hero__cta {
+    margin-bottom: var(--s5);
+  }
+  .hero__stats :global(.spec) {
+    max-width: 640px;
+  }
+
+  /* Panel de imagen: sin radius ni sombra, borde técnico y filete rojo arriba. */
+  .hero__media {
+    position: relative;
+    margin: 0;
+    background: var(--ink-3);
+    border: 1px solid var(--line);
+  }
+  .hero__media::before {
+    /* Filete rojo — misma lengua de marca que el triángulo del logo. */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 64px;
+    height: 4px;
+    background: var(--red);
+    z-index: 1;
+  }
+  .hero__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1563 / 886;
+    object-fit: cover;
+    object-position: 50% 45%;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding-block: var(--s5) var(--s4);
+    }
+    .hero__in {
+      grid-template-columns: 1fr;
+      gap: var(--s4);
+    }
+    /* En móvil la imagen va arriba del texto. */
+    .hero__media {
+      order: -1;
+    }
+    .hero__copy {
+      max-width: none;
+    }
+  }
+</style>

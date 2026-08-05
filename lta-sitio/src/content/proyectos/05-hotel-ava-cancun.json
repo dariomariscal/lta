@@ -1,0 +1,17 @@
+{
+  "orden": 5,
+  "nombre": "Hotel AVA Cancún",
+  "lugar": "Quintana Roo",
+  "cat": "hoteleria",
+  "etiqueta": "Hotelería",
+  "alcance": "Albañilería, tablaroca, pasta y pintura",
+  "cta": "Cotizar acabados para hotelería",
+  "sector": "02-hoteleria",
+  "fotos": [
+    "ava-cancun_fachada-terminada",
+    "ava-cancun_aplanado-de-pasta",
+    "ava-cancun_pintura-fachada",
+    "ava-cancun_auditorio-andamio"
+  ],
+  "texto": "Trabajos de albañilería, tablaroca, pasta y pintura en obra hotelera de gran formato, incluyendo fachada exterior, plafones curvos del auditorio y aplanados en áreas comunes."
+}

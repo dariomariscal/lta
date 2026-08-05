@@ -1,0 +1,70 @@
+---
+// ProjectFilters — 7 botones de sector con etiquetas reales + conteo en vivo.
+// Estado activo vía aria-pressed. El conteo se anuncia con aria-live.
+interface Props {
+  total: number;
+}
+const { total } = Astro.props;
+
+const filtros = [
+  { cat: 'todos', label: 'Todos' },
+  { cat: 'infraestructura', label: 'Infraestructura carretera' },
+  { cat: 'hoteleria', label: 'Hotelería' },
+  { cat: 'retail', label: 'Retail' },
+  { cat: 'instalaciones', label: 'Instalaciones' },
+  { cat: 'mantenimiento', label: 'Mantenimiento' },
+  { cat: 'topografia', label: 'Topografía' },
+];
+---
+
+<div class="filters">
+  <div class="filters__row">
+    {
+      filtros.map((f) => (
+        <button
+          class="filter mono"
+          data-filter={f.cat}
+          aria-pressed={f.cat === 'todos' ? 'true' : 'false'}
+        >
+          {f.label}
+        </button>
+      ))
+    }
+  </div>
+  <p class="mono filters__count" data-proj-count aria-live="polite">{total} proyectos</p>
+</div>
+
+<style>
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--s3);
+    flex-wrap: wrap;
+  }
+  .filters__row {
+    display: flex;
+    gap: var(--s1);
+    flex-wrap: wrap;
+  }
+  .filter {
+    padding: 9px 16px;
+    border: 1px solid var(--line-2);
+    color: var(--concrete-2);
+    transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+  .filter:hover {
+    color: var(--concrete);
+  }
+  .filter[aria-pressed='true'] {
+    border-color: var(--red);
+    background: rgba(176, 58, 40, 0.14);
+    color: var(--concrete);
+  }
+  .filters__count {
+    color: var(--concrete-4);
+    white-space: nowrap;
+    align-self: center;
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "orden": 3,
+  "nombre": "Obra civil en carretera",
+  "lugar": "Michoacán",
+  "cat": "infraestructura",
+  "etiqueta": "Infraestructura carretera",
+  "alcance": "Corte de talud y alcantarillas prefabricadas",
+  "cta": "Cotizar obra civil",
+  "sector": "01-infraestructura-carretera",
+  "fotos": ["michoacan_corte-de-talud-alcantarillas"],
+  "texto": "Obra civil sobre carretera en operación: corte y estabilización de talud, desplante y colocación de alcantarillas prefabricadas, con control de tránsito durante toda la ejecución."
+}

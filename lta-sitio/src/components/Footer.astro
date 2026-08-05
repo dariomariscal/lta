@@ -1,0 +1,142 @@
+---
+// Footer — tres columnas: empresa, mapa del sitio, contacto. Barra con RFC.
+// Datos verificados de lta-docs/docs/02-contenido. RFC solo aquí, discreto.
+import Marca from '../assets/lta-marca.svg?raw';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-foot">
+  <div class="wrap grid8 site-foot__grid">
+    <div class="site-foot__col site-foot__about">
+      <a class="brand-foot" href="/" aria-label="LTA Construcción y Mantenimiento — Inicio">
+        <span class="brand-foot__mark" set:html={Marca} />
+        <span class="brand-foot__desc mono">
+          <span>Construcción</span>
+          <span>y Mantenimiento</span>
+        </span>
+      </a>
+      <p class="body">
+        LTA Construcción y Mantenimiento, unidad de Grupo Industrial LTA.
+        Contratista mexicana que ejecuta y mantiene obra por encargo de terceros,
+        con cobertura nacional.
+      </p>
+      <p class="mono site-foot__mv">
+        Compromiso · Respeto · Igualdad y equidad · Lealtad · Honestidad · Responsabilidad
+      </p>
+    </div>
+
+    <nav class="site-foot__col" aria-label="Mapa del sitio">
+      <p class="mono site-foot__h">Sitio</p>
+      <ul>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/servicios">Servicios</a></li>
+        <li><a href="/proyectos">Proyectos</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-foot__col">
+      <p class="mono site-foot__h">Contacto</p>
+      <ul class="site-foot__contact">
+        <li><a href="tel:+525589510107">55 8951 0107</a></li>
+        <li><a href="tel:+525589510108">55 8951 0108</a></li>
+        <li><a href="mailto:contacto@grupolta.com">contacto@grupolta.com</a></li>
+        <li><a href="mailto:servicioacliente@grupolta.com">servicioacliente@grupolta.com</a></li>
+        <li class="site-foot__hours">Lun–Vie 9:00–19:00 · Sáb 9:00–13:00</li>
+        <li class="site-foot__hours">Ciudad de México</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="wrap site-foot__bar mono">
+    <span>© {year} Grupo Industrial LTA</span>
+    <span>RFC GIL200227Q7A</span>
+    <span>Dir. Gral. Ing. Alfonso Téllez Patiño</span>
+  </div>
+</footer>
+
+<style>
+  .site-foot {
+    background: var(--ink-2);
+    border-top: 1px solid var(--line);
+    padding-top: var(--s6);
+  }
+  .site-foot__grid {
+    row-gap: var(--s4);
+  }
+  .site-foot__about {
+    grid-column: span 4;
+  }
+  .site-foot__col:not(.site-foot__about) {
+    grid-column: span 2;
+  }
+  .brand-foot {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--concrete);
+    margin-bottom: var(--s3);
+  }
+  .brand-foot__mark :global(svg) {
+    height: 46px;
+    width: auto;
+    display: block;
+  }
+  /* Descriptor: barras rojas con texto claro, réplica del lockup impreso. */
+  .brand-foot__desc {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+  .brand-foot__desc span {
+    background: var(--red);
+    color: var(--concrete);
+    font-size: 13px;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 5px 8px 4px;
+  }
+  .site-foot__about .body {
+    color: var(--concrete-3);
+    margin-bottom: var(--s3);
+  }
+  .site-foot__mv {
+    color: var(--concrete-4);
+    line-height: 1.8;
+  }
+  .site-foot__h {
+    color: var(--concrete-4);
+    margin-bottom: var(--s2);
+  }
+  .site-foot__col li {
+    margin-bottom: var(--s1);
+  }
+  .site-foot__col a {
+    color: var(--concrete-2);
+    transition: color var(--dur) var(--ease);
+  }
+  .site-foot__col a:hover {
+    color: var(--red-2);
+  }
+  .site-foot__hours {
+    color: var(--concrete-4);
+    font-size: 13px;
+  }
+  .site-foot__bar {
+    margin-top: var(--s6);
+    padding-block: var(--s3);
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: var(--s4);
+    flex-wrap: wrap;
+    color: var(--concrete-4);
+  }
+  @media (max-width: 900px) {
+    .site-foot__about,
+    .site-foot__col:not(.site-foot__about) {
+      grid-column: 1;
+    }
+  }
+</style>

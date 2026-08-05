@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1990 945" role="img" aria-label="LTA">
+  <!--
+    Marca LTA — reconstrucción plana (sin biseles ni degradados) trazada desde
+    el logo original (lta-marca-fondo-oscuro.png, 1990×945).
+
+    La L, la T y la A forman una sola figura entrelazada (greca/laberinto):
+    la T comparte su travesaño con el vértice de la A, y su pie se funde con la
+    L. Un único path para el gris, con el contador interno recortado.
+    El acento es un triángulo rojo delgado en el centro (el asta interior).
+    El gris hereda el color del contexto con currentColor.
+  -->
+
+  <!-- L + T + A (una sola figura, contador interno recortado) -->
+  <path
+    fill="currentColor"
+    fill-rule="evenodd"
+    d="M0 0 V945 H849 V376 H566 V189 H1444 L1697 752 H1339 L1250 945 H1990 L1573 0 H377 V566 H655 V752 H190 V0 Z"
+  />
+
+  <!-- Acento rojo: triángulo delgado (asta interior) -->
+  <path fill="#C8462F" d="M1039 376 H1299 L1039 858 Z" />
+</svg>

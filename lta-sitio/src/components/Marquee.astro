@@ -1,0 +1,40 @@
+---
+// Marquee — tira en loop continuo. Duplica el contenido del slot para que el
+// bucle sea sin costura. Se detiene con prefers-reduced-motion (global.css).
+interface Props {
+  speed?: number; // segundos por vuelta
+  class?: string;
+}
+const { speed = 32, class: cls = '' } = Astro.props;
+---
+
+<div class:list={['marquee', cls]} style={`--marquee-speed:${speed}s`}>
+  <div class="marquee__track">
+    <div class="marquee__group"><slot /></div>
+    <div class="marquee__group" aria-hidden="true"><slot /></div>
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    width: 100%;
+  }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--marquee-speed) linear infinite;
+  }
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+  .marquee__group {
+    display: flex;
+    align-items: center;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

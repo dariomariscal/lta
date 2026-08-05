@@ -1,0 +1,16 @@
+{
+  "orden": 7,
+  "nombre": "Restaurante Francés AVA",
+  "lugar": "Cancún, Quintana Roo",
+  "cat": "hoteleria",
+  "etiqueta": "Hotelería",
+  "alcance": "Instalaciones, estructura y acabado fino",
+  "cta": "Cotizar acabado fino",
+  "sector": "02-hoteleria",
+  "fotos": [
+    "ava-restaurante_bar-terminado",
+    "ava-restaurante_armado-trabes-hidrosanitaria",
+    "ava-restaurante_bastidor-curvo-nivel-laser"
+  ],
+  "texto": "Construcción completa de restaurante dentro de complejo hotelero: armado de trabes con instalación hidrosanitaria integrada, bastidores curvos en madera, plafones registrables y acabado final de barra y áreas de comensales."
+}

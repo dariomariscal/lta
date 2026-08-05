@@ -1,0 +1,46 @@
+---
+// Picture — helper para las fotos del acervo (WebP pre-optimizado, 3 anchos).
+// Genera srcset con -400/-800/-1600 desde public/img/<sector>/<slug>.
+interface Props {
+  sector: string;
+  slug: string;
+  alt: string;
+  width: number;
+  height: number;
+  sizes?: string;
+  eager?: boolean;
+  /** Aplica el revelado por clip-path (barrido) al entrar al viewport. */
+  reveal?: boolean;
+  class?: string;
+  fetchpriority?: 'high' | 'auto';
+}
+const {
+  sector,
+  slug,
+  alt,
+  width,
+  height,
+  sizes = '(max-width:640px) 92vw, (max-width:1000px) 46vw, 30vw',
+  eager = false,
+  reveal = false,
+  class: cls = '',
+  fetchpriority,
+} = Astro.props;
+
+const base = `/img/${sector}/${slug}`;
+const srcset = `${base}-400.webp 400w, ${base}-800.webp 800w, ${base}-1600.webp 1600w`;
+---
+
+<img
+  class={cls}
+  src={`${base}-800.webp`}
+  srcset={srcset}
+  sizes={sizes}
+  width={width}
+  height={height}
+  alt={alt}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding="async"
+  fetchpriority={fetchpriority}
+  data-reveal-img={reveal ? '' : undefined}
+/>

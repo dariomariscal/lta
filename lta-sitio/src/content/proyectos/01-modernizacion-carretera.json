@@ -1,0 +1,17 @@
+{
+  "orden": 1,
+  "nombre": "Modernización carretera",
+  "lugar": "Michoacán",
+  "cat": "infraestructura",
+  "etiqueta": "Infraestructura carretera",
+  "alcance": "Terracerías, drenaje, base hidráulica y carpeta",
+  "cta": "Cotizar obra carretera",
+  "sector": "01-infraestructura-carretera",
+  "fotos": [
+    "michoacan_tren-de-pavimentacion",
+    "michoacan_vista-aerea-ampliacion",
+    "michoacan_guarnicion-y-carpeta",
+    "michoacan_estructura-senalizacion"
+  ],
+  "texto": "Modernización de cuerpo carretero con ampliación de sección. Incluyó movimiento de tierras, obras de drenaje transversal, tendido de base hidráulica y colocación de carpeta asfáltica con tren de pavimentación completo, además del señalamiento horizontal y vertical."
+}

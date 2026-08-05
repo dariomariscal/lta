@@ -1,0 +1,12 @@
+{
+  "orden": 12,
+  "nombre": "Mantenimiento Walmart",
+  "lugar": "Nacional",
+  "cat": "mantenimiento",
+  "etiqueta": "Mantenimiento",
+  "alcance": "Imagen exterior y mantenimiento correctivo",
+  "cta": "Cotizar mantenimiento nocturno",
+  "sector": "05-mantenimiento",
+  "fotos": ["walmart_letrero-nocturno-plataforma"],
+  "texto": "Mantenimiento a imagen exterior de tiendas en operación. Los trabajos se ejecutan de noche, con plataforma articulada, para no afectar el horario comercial ni el acceso de clientes."
+}

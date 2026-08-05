@@ -1,0 +1,46 @@
+---
+// ImageBand — banda panorámica de respiro. Foto a lo ancho + etiqueta en mono
+// con mix-blend-mode difference (legible sobre cualquier foto). Sin CTA ni titular.
+import Picture from './Picture.astro';
+interface Props {
+  sector: string;
+  slug: string;
+  alt: string;
+  tag: string;
+}
+const { sector, slug, alt, tag } = Astro.props;
+---
+
+<section class="band">
+  <Picture
+    sector={sector}
+    slug={slug}
+    alt={alt}
+    width={1600}
+    height={520}
+    sizes="100vw"
+    reveal
+    class="band__img media-box"
+  />
+  <span class="band__tag mono">{tag}</span>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    height: clamp(220px, 34vw, 420px);
+    overflow: hidden;
+  }
+  .band__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .band__tag {
+    position: absolute;
+    left: var(--margin);
+    bottom: var(--s3);
+    color: #fff;
+    mix-blend-mode: difference;
+  }
+</style>

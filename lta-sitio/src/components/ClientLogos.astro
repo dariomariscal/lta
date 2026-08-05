@@ -1,0 +1,67 @@
+---
+// ClientLogos — única banda clara del sitio. Logos monocromáticos que recuperan
+// color en hover, en marquee continuo. ⚠️ Pendiente de autorización (docs/09).
+import Marquee from './Marquee.astro';
+
+const logos = [
+  'walmart', 'ocesa', 'rcd-hotels', 'alcaldia-benito-juarez', 'grupo-hycsa',
+  'fontan-ixtapa', 'grupo-chufani', 'treinventa', 'gobierno-edomex', 'naucalpan-de-juarez',
+];
+const nombres: Record<string, string> = {
+  'walmart': 'Walmart',
+  'ocesa': 'OCESA',
+  'rcd-hotels': 'RCD Hotels',
+  'alcaldia-benito-juarez': 'Alcaldía Benito Juárez',
+  'grupo-hycsa': 'Grupo HYCSA',
+  'fontan-ixtapa': 'Fontán Ixtapa',
+  'grupo-chufani': 'Grupo Chufani',
+  'treinventa': 'Treinventa',
+  'gobierno-edomex': 'Gobierno del Estado de México',
+  'naucalpan-de-juarez': 'Naucalpan de Juárez',
+};
+---
+
+<section class="clients">
+  <div class="wrap">
+    <p class="mono clients__label">Nos contratan</p>
+  </div>
+  <Marquee speed={40} class="clients__marquee">
+    {
+      logos.map((l) => (
+        <img
+          class="clients__logo"
+          src={`/img/logos/${l}.webp`}
+          width="140"
+          height="52"
+          loading="lazy"
+          decoding="async"
+          alt={nombres[l]}
+        />
+      ))
+    }
+  </Marquee>
+</section>
+
+<style>
+  .clients {
+    background: var(--concrete);
+    color: var(--ink);
+    padding-block: var(--s5);
+    border-top: 1px solid var(--line);
+  }
+  .clients__label {
+    color: var(--concrete-4);
+    margin-bottom: var(--s4);
+  }
+  .clients__logo {
+    height: 52px;
+    width: auto;
+    object-fit: contain;
+    margin-inline: var(--s5);
+    filter: grayscale(1) brightness(0.25) opacity(0.55);
+    transition: filter var(--dur-slow) var(--ease);
+  }
+  .clients__logo:hover {
+    filter: none;
+  }
+</style>

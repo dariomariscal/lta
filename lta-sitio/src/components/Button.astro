@@ -1,0 +1,43 @@
+---
+// Button — CTA. Variantes: default (borde rojo), solid (relleno), dark (banda clara).
+// Un solo primario (solid) por página.
+interface Props {
+  href: string;
+  variant?: 'default' | 'solid' | 'dark';
+  class?: string;
+}
+const { href, variant = 'default', class: cls = '' } = Astro.props;
+---
+
+<a href={href} class:list={['btn mono', `btn--${variant}`, cls]}>
+  <slot />
+</a>
+
+<style>
+  .btn {
+    display: inline-block;
+    padding: 11px 22px;
+    border: 1px solid var(--red);
+    color: var(--concrete);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+  .btn--default:hover {
+    background: var(--red);
+  }
+  .btn--solid {
+    background: var(--red);
+  }
+  .btn--solid:hover {
+    background: var(--red-2);
+    border-color: var(--red-2);
+  }
+  .btn--dark {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .btn--dark:hover {
+    background: var(--ink);
+    color: var(--concrete);
+  }
+</style>

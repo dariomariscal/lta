@@ -1,0 +1,28 @@
+---
+// ServiceGrid — retícula de tarjetas de servicio. gap:1px sobre fondo --line
+// simula líneas de plano. 3 col → 2 (1000px) → 1 (640px).
+---
+
+<div class="svc" data-reveal-group>
+  <slot />
+</div>
+
+<style>
+  .svc {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  @media (max-width: 1000px) {
+    .svc {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .svc {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,16 @@
+{
+  "orden": 13,
+  "nombre": "Espectaculares Walmart",
+  "lugar": "Sinaloa",
+  "cat": "mantenimiento",
+  "etiqueta": "Mantenimiento",
+  "alcance": "Mantenimiento a espectaculares y tótems",
+  "cta": "Cotizar mantenimiento en altura",
+  "sector": "05-mantenimiento",
+  "fotos": [
+    "walmart-sinaloa_canastilla-grua-totem",
+    "bodega-aurrera_grua-telescopica-espectacular",
+    "bodega-aurrera_esfera-pintura-canastilla"
+  ],
+  "texto": "Mantenimiento y renovación de imagen en espectaculares, tótems y esferas de Walmart y Bodega Aurrerá, con grúa telescópica y canastilla para trabajo en altura sobre vialidad."
+}

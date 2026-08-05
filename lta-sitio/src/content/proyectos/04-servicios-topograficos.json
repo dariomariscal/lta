@@ -1,0 +1,17 @@
+{
+  "orden": 4,
+  "nombre": "Servicios topográficos",
+  "lugar": "Obra carretera",
+  "cat": "topografia",
+  "etiqueta": "Topografía",
+  "alcance": "Trazo, nivelación y control de obra",
+  "cta": "Solicitar brigada topográfica",
+  "sector": "06-topografia",
+  "fotos": [
+    "topografia_estacion-total-brigada",
+    "topografia_trazo-guarnicion-cadenamiento",
+    "topografia_nivelacion-base-hidraulica",
+    "topografia_control-sobre-estructura"
+  ],
+  "texto": "Brigadas topográficas con estación total y nivel: levantamiento inicial, trazo de eje, marcado de cadenamientos, control de niveles sobre base y verificación de espesores durante la pavimentación."
+}

@@ -1,0 +1,12 @@
+{
+  "orden": 8,
+  "nombre": "Fontán Ixtapa",
+  "lugar": "Guerrero",
+  "cat": "hoteleria",
+  "etiqueta": "Hotelería",
+  "alcance": "Remodelación de habitaciones y áreas comunes",
+  "cta": "Cotizar remodelación hotelera",
+  "sector": "02-hoteleria",
+  "fotos": ["fontan-ixtapa_habitacion-terminada"],
+  "texto": "Remodelación de habitaciones y áreas comunes con acabados, mobiliario fijo y aplicación de gráfica ambiental en muros."
+}

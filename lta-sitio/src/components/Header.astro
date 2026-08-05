@@ -1,0 +1,157 @@
+---
+// Header — barra sticky con navegación. Bajo 900px colapsa a menú desplegable.
+import Marca from '../assets/lta-marca.svg?raw';
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Inicio' },
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/proyectos', label: 'Proyectos' },
+  { href: '/contacto', label: 'Contacto' },
+];
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header class="site-head">
+  <div class="site-head__in wrap">
+    <a class="brand" href="/" aria-label="LTA — Inicio" set:html={Marca} />
+
+    <button
+      class="nav-toggle mono"
+      aria-expanded="false"
+      aria-controls="nav"
+      aria-label="Abrir menú"
+    >
+      ≡
+    </button>
+
+    <nav class="nav mono" id="nav">
+      {
+        links.map((l) => (
+          <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
+      <a class="btn mono nav__cta" href="/contacto">Cotizar</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const nav = document.querySelector<HTMLElement>('#nav');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  });
+  // Cierra al navegar
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 66px;
+    background: rgba(14, 14, 13, 0.94);
+    backdrop-filter: saturate(160%) blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-head__in {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    color: var(--concrete);
+    transition: color var(--dur) var(--ease);
+  }
+  .brand :global(svg) {
+    height: 30px;
+    width: auto;
+    display: block;
+  }
+  .brand:hover {
+    color: #fff;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: var(--s4);
+  }
+  .nav a {
+    color: var(--concrete-2);
+    transition: color var(--dur) var(--ease);
+  }
+  .nav a:hover,
+  .nav a[aria-current='page'] {
+    color: var(--red-2);
+  }
+  .nav__cta {
+    color: var(--concrete);
+  }
+  .btn {
+    border: 1px solid var(--red);
+    padding: 9px 18px;
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .btn:hover {
+    background: var(--red);
+    color: var(--concrete);
+  }
+  .nav-toggle {
+    display: none;
+    font-size: 24px;
+    line-height: 1;
+    padding: var(--s1);
+  }
+
+  @media (max-width: 900px) {
+    .nav-toggle {
+      display: block;
+    }
+    .nav {
+      position: absolute;
+      top: 66px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      background: var(--ink-2);
+      border-bottom: 1px solid var(--line);
+      padding: var(--s2) var(--margin);
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+    }
+    .nav.is-open {
+      transform: none;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav a {
+      padding: var(--s2) 0;
+      width: 100%;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav__cta {
+      border: 1px solid var(--red);
+      padding: var(--s2);
+      margin-top: var(--s2);
+      text-align: center;
+    }
+  }
+</style>

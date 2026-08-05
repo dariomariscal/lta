@@ -1,0 +1,231 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/Hero.astro';
+import ClientLogos from '@components/ClientLogos.astro';
+import ServiceGrid from '@components/ServiceGrid.astro';
+import ServiceCard from '@components/ServiceCard.astro';
+import ImageBand from '@components/ImageBand.astro';
+import FeatureCard from '@components/FeatureCard.astro';
+import Masonry from '@components/Masonry.astro';
+import Coverage from '@components/Coverage.astro';
+import Button from '@components/Button.astro';
+import ContactForm from '@components/ContactForm.astro';
+import SpecList from '@components/SpecList.astro';
+
+// 03 · Qué hacemos — seis líneas (docs/02)
+const servicios = [
+  { num: '01', title: 'Infraestructura carretera', text: 'Terracerías, obras de drenaje, alcantarillas, base hidráulica y carpeta asfáltica. Obra pública federal y estatal.', image: { sector: '01-infraestructura-carretera', slug: 'michoacan_tren-de-pavimentacion', alt: 'Tren de pavimentación en modernización carretera de Michoacán' } },
+  { num: '02', title: 'Acabados y albañilería', text: 'Tablaroca, pasta, texturizados, yeso y pintura. Fachadas en altura con trabajo vertical certificado.', image: { sector: '02-hoteleria', slug: 'ava-restaurante_bar-terminado', alt: 'Bar terminado del Restaurante Francés AVA' } },
+  { num: '03', title: 'Instalaciones', text: 'Eléctricas, hidráulicas, sanitarias y de gas. Coordinación con obra civil para no rehacer lo terminado.', image: { sector: '02-hoteleria', slug: 'ava-restaurante_armado-trabes-hidrosanitaria', alt: 'Armado de trabes con tubería hidrosanitaria integrada' } },
+  { num: '04', title: 'Obra comercial', text: 'Construcción y equipamiento de tiendas llave en mano: obra gris, acabados, imagen y mobiliario.', image: { sector: '03-retail', slug: 'neto-mitla-oaxaca_fachada-terminada', alt: 'Fachada terminada de la tienda Neto Mitla, Oaxaca' } },
+  { num: '05', title: 'Mantenimiento industrial', text: 'Rehabilitación, imagen, espectaculares, luminarias, torres de enfriamiento y chillers. Trabajo nocturno disponible.', image: { sector: '05-mantenimiento', slug: 'walmart-sinaloa_canastilla-grua-totem', alt: 'Canastilla de grúa sobre tótem publicitario de Walmart Sinaloa' } },
+  { num: '06', title: 'Servicios profesionales', text: 'Topografía, mecánica de suelos, licencias, gerencia de proyectos y propuestas para licitación pública.', image: { sector: '06-topografia', slug: 'topografia_estacion-total-brigada', alt: 'Estación total con brigada topográfica en obra carretera' } },
+];
+
+// 06 · Mosaico "Detrás de la obra"
+const mosaico = [
+  { sector: '02-hoteleria', slug: 'ava-restaurante_armado-trabes-hidrosanitaria', alt: 'Armado de trabes con instalación hidrosanitaria sobre piso protegido', width: 967, height: 1094 },
+  { sector: '02-hoteleria', slug: 'ava-restaurante_bastidor-curvo-nivel-laser', alt: 'Bastidor curvo de madera con nivel láser en operación', width: 1000, height: 1094 },
+  { sector: '06-topografia', slug: 'topografia_trazo-guarnicion-cadenamiento', alt: 'Trazo sobre guarnición con cadenamiento 1300 marcado al amanecer', width: 1706, height: 1300 },
+  { sector: '01-infraestructura-carretera', slug: 'maravatio_compactador-pata-de-cabra', alt: 'Compactador pata de cabra sobre terracería en Maravatío', width: 1280, height: 960 },
+  { sector: '01-infraestructura-carretera', slug: 'michoacan_corte-de-talud-alcantarillas', alt: 'Corte de talud y alcantarillas prefabricadas junto a carretera', width: 1772, height: 1786 },
+  { sector: '05-mantenimiento', slug: 'bodega-aurrera_grua-telescopica-espectacular', alt: 'Grúa telescópica frente a espectacular de Bodega Aurrerá', width: 1094, height: 1063 },
+];
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  name: 'LTA Construcción y Mantenimiento',
+  alternateName: 'Grupo Industrial LTA',
+  url: 'https://grupolta.com',
+  telephone: ['+525589510107', '+525589510108'],
+  email: 'contacto@grupolta.com',
+  address: { '@type': 'PostalAddress', addressLocality: 'Ciudad de México', addressCountry: 'MX' },
+  areaServed: 'México',
+  openingHours: ['Mo-Fr 09:00-19:00', 'Sa 09:00-13:00'],
+};
+---
+
+<BaseLayout
+  title="LTA · Construcción y mantenimiento con cobertura nacional"
+  description="Constructora mexicana de infraestructura carretera, hotelería, retail y obra pública. Trabajamos fuera de horario cuando la operación no puede detenerse."
+  preloadImage="/img/01-infraestructura-carretera/michoacan_vista-aerea-ampliacion-1600.webp"
+>
+  <script type="application/ld+json" slot="head" is:inline set:html={JSON.stringify(jsonld)} />
+
+  <!-- 01 · Hero -->
+  <Hero
+    eyebrow="Construcción y mantenimiento · Cobertura nacional"
+    title="Construimos y mantenemos en toda la República."
+    sub="Infraestructura carretera, hotelería, retail y obra pública. Trabajamos fuera de horario cuando la operación del cliente no puede detenerse."
+    image={{ sector: '01-infraestructura-carretera', slug: 'michoacan_vista-aerea-ampliacion', alt: 'Vista aérea de la ampliación carretera en Michoacán ejecutada por LTA' }}
+    cta={{ href: '/contacto', label: 'Solicitar cotización' }}
+    stats={[
+      { k: 'Estados', v: '09' },
+      { k: 'Proyectos', v: '14' },
+      { k: 'Constituidos', v: '2020' },
+      { k: 'Base', v: 'Ciudad de México' },
+    ]}
+  />
+
+  <!-- 02 · Clientes -->
+  <ClientLogos />
+
+  <!-- 03 · Qué hacemos -->
+  <section class="section" aria-labelledby="svc-h">
+    <div class="wrap">
+      <div class="grid8 section-head">
+        <div class="section-head__title">
+          <p class="mono eyebrow">Qué hacemos</p>
+          <h2 id="svc-h" class="display" data-reveal-text>Seis líneas, un solo contratista.</h2>
+        </div>
+        <p class="lede section-head__aside" data-reveal>
+          Cubrimos desde el movimiento de tierras hasta el último detalle de acabado,
+          más la ingeniería y la gestión que hacen posible arrancar. Un solo interlocutor
+          para todo el proyecto.
+        </p>
+      </div>
+      <ServiceGrid>
+        {servicios.map((s) => <ServiceCard {...s} />)}
+      </ServiceGrid>
+    </div>
+  </section>
+
+  <!-- 04 · Banda de corte -->
+  <ImageBand
+    sector="02-hoteleria"
+    slug="ava-cancun_aplanado-de-pasta"
+    alt="Aplicación de pasta en muro exterior del Hotel AVA Cancún"
+    tag="Hotel AVA · Cancún, Quintana Roo"
+  />
+
+  <!-- 05 · Obra destacada -->
+  <section class="section" aria-labelledby="feat-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="feat-h" class="display" data-reveal-text>Tres trabajos que resumen lo que hacemos.</h2>
+      </div>
+      <div class="feat-grid" data-reveal-group>
+        <FeatureCard
+          sector="02-hoteleria" slug="secrets-cancun_pintura-fachada-rappel"
+          alt="Técnico suspendido en rappel pintando la fachada del Hotel Secrets Cancún"
+          title="Trabajo en altura"
+          rows={[{ k: 'Ubicación', v: 'Quintana Roo' }, { k: 'Sector', v: 'Hotelería' }, { k: 'Técnica', v: 'Acceso por cuerda' }]}
+        />
+        <FeatureCard
+          sector="01-infraestructura-carretera" slug="michoacan_tren-de-pavimentacion"
+          alt="Tren completo de pavimentación con cuadrilla en Michoacán"
+          title="Obra carretera"
+          rows={[{ k: 'Ubicación', v: 'Michoacán' }, { k: 'Sector', v: 'Infraestructura' }, { k: 'Alcance', v: 'Base y carpeta' }]}
+        />
+        <FeatureCard
+          sector="02-hoteleria" slug="ava-restaurante_bar-terminado"
+          alt="Bar circular con plafón de madera del Restaurante Francés AVA"
+          title="Acabado fino"
+          rows={[{ k: 'Ubicación', v: 'Cancún, Q. Roo' }, { k: 'Sector', v: 'Hotelería' }, { k: 'Alcance', v: 'Barra y plafón' }]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · Detrás de la obra -->
+  <section class="section" aria-labelledby="proc-h">
+    <div class="wrap">
+      <div class="grid8 section-head">
+        <div class="section-head__title">
+          <h2 id="proc-h" class="display" data-reveal-text>El proceso, no solo el resultado.</h2>
+        </div>
+        <p class="lede section-head__aside" data-reveal>
+          Casi cualquiera puede mostrar el edificio terminado. Estas fotos documentan
+          cómo se llega ahí: trazo, armado, coordinación entre oficios y control de
+          calidad en cada etapa.
+        </p>
+      </div>
+      <Masonry items={mosaico} />
+    </div>
+  </section>
+
+  <!-- 07 · Cobertura -->
+  <section class="section" aria-labelledby="cov-h">
+    <div class="wrap">
+      <div class="grid8 section-head">
+        <div class="section-head__title">
+          <h2 id="cov-h" class="display" data-reveal-text>Toda la República. Obra documentada en nueve estados.</h2>
+        </div>
+        <p class="lede section-head__aside" data-reveal>
+          Mayor presencia: Centro, Veracruz y Sureste.
+        </p>
+      </div>
+      <Coverage />
+    </div>
+  </section>
+
+  <!-- 08 · Banda de cierre -->
+  <ImageBand
+    sector="02-hoteleria"
+    slug="ava-cancun_fachada-terminada"
+    alt="Fachada terminada del Hotel AVA Cancún con albercas y mar de fondo"
+    tag="Hotel AVA · Cancún, Quintana Roo"
+  />
+
+  <!-- 09 · Contacto -->
+  <section class="section" id="contacto" aria-labelledby="cta-h">
+    <div class="wrap grid8">
+      <div class="home-contact__intro">
+        <p class="mono eyebrow">Contacto</p>
+        <h2 id="cta-h" class="display" data-reveal-text>¿Tienes un proyecto? Hablemos.</h2>
+        <p class="lede" data-reveal>
+          Cuéntanos qué necesitas y te respondemos con una propuesta. Visita técnica
+          sin costo dentro de nuestras zonas de cobertura.
+        </p>
+        <div class="home-contact__direct" data-reveal>
+          <SpecList
+            rows={[
+              { k: 'Teléfono', v: '55 8951 0107' },
+              { k: 'Correo', v: 'contacto@grupolta.com' },
+              { k: 'Horario', v: 'Lun–Vie 9–19 · Sáb 9–13' },
+            ]}
+          />
+          <Button href="/proyectos" class="home-contact__alt">Ver proyectos</Button>
+        </div>
+      </div>
+      <div class="home-contact__form" data-reveal>
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s3);
+  }
+  .home-contact__intro,
+  .home-contact__form {
+    grid-column: span 4;
+  }
+  .home-contact__intro .display {
+    margin-block: var(--s2) var(--s3);
+  }
+  .home-contact__direct {
+    margin-top: var(--s4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s3);
+    align-items: flex-start;
+  }
+  @media (max-width: 900px) {
+    .feat-grid {
+      grid-template-columns: 1fr;
+    }
+    .home-contact__intro,
+    .home-contact__form {
+      grid-column: 1;
+    }
+    .home-contact__form {
+      margin-top: var(--s4);
+    }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+// ProjectCard — enlace a la página dedicada del proyecto (/proyectos/[slug]).
+// Imagen 3:2 con hover scale + título + línea "Ubicación · Sector".
+import Picture from './Picture.astro';
+interface Props {
+  slug: string;
+  cat: string;
+  nombre: string;
+  lugar: string;
+  etiqueta: string;
+  sector: string;
+  imgSlug: string;
+  alt: string;
+}
+const { slug, cat, nombre, lugar, etiqueta, sector, imgSlug, alt } = Astro.props;
+---
+
+<a class="proj" data-proj-card data-cat={cat} data-reveal href={`/proyectos/${slug}`}>
+  <span class="proj__media media-box">
+    <Picture sector={sector} slug={imgSlug} alt={alt} width={800} height={533} class="proj__img" />
+  </span>
+  <h3 class="proj__title">{nombre}</h3>
+  <span class="proj__foot">
+    <span class="mono proj__meta">{lugar} · {etiqueta}</span>
+    <span class="mono proj__more" aria-hidden="true">Ver <span class="proj__caret">›</span></span>
+  </span>
+</a>
+
+<style>
+  .proj {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+  }
+  /* El atributo hidden (filtrado) debe ganar a display:flex */
+  .proj[hidden] {
+    display: none !important;
+  }
+  .proj__media {
+    aspect-ratio: 3 / 2;
+  }
+  .proj__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-slow) var(--ease);
+  }
+  .proj:hover .proj__img {
+    transform: scale(1.03);
+  }
+  .proj__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 1.05;
+    transition: color var(--dur) var(--ease);
+  }
+  .proj:hover .proj__title {
+    color: var(--red-2);
+  }
+  .proj__foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s2);
+    padding-top: 6px;
+    border-top: 1px solid var(--line);
+  }
+  .proj__meta {
+    color: var(--concrete-4);
+  }
+  .proj__more {
+    color: var(--concrete-3);
+    white-space: nowrap;
+    transition: color var(--dur) var(--ease);
+  }
+  .proj:hover .proj__more {
+    color: var(--red-2);
+  }
+  .proj__caret {
+    display: inline-block;
+    transition: transform var(--dur) var(--ease);
+  }
+  .proj:hover .proj__caret {
+    transform: translateX(3px);
+  }
+</style>

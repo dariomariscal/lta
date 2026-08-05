@@ -1,0 +1,54 @@
+---
+// FeatureCard — tarjeta de obra destacada. Imagen 4:5 con hover scale + ficha técnica.
+import Picture from './Picture.astro';
+import SpecList from './SpecList.astro';
+interface Props {
+  sector: string;
+  slug: string;
+  alt: string;
+  title: string;
+  rows: { k: string; v: string }[];
+}
+const { sector, slug, alt, title, rows } = Astro.props;
+---
+
+<article class="feat__card" data-reveal>
+  <div class="feat__media media-box">
+    <Picture
+      sector={sector}
+      slug={slug}
+      alt={alt}
+      width={800}
+      height={1000}
+      class="feat__img"
+    />
+  </div>
+  <h3 class="feat__title">{title}</h3>
+  <SpecList rows={rows} animate />
+</article>
+
+<style>
+  .feat__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+  }
+  .feat__media {
+    aspect-ratio: 4 / 5;
+  }
+  .feat__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-slow) var(--ease);
+  }
+  .feat__card:hover .feat__img {
+    transform: scale(1.03);
+  }
+  .feat__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 1.05;
+  }
+</style>

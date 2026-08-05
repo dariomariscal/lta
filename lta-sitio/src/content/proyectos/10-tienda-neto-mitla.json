@@ -1,0 +1,12 @@
+{
+  "orden": 10,
+  "nombre": "Tienda Neto Mitla",
+  "lugar": "Oaxaca",
+  "cat": "retail",
+  "etiqueta": "Retail",
+  "alcance": "Obra nueva llave en mano",
+  "cta": "Cotizar tienda llave en mano",
+  "sector": "03-retail",
+  "fotos": ["neto-mitla-oaxaca_fachada-terminada", "neto-mitla-oaxaca_interior-equipado"],
+  "texto": "Construcción de tienda desde cimentación hasta entrega: obra gris, instalaciones, acabados, imagen exterior con tótem y equipamiento interior con anaquelería y mobiliario de exhibición."
+}

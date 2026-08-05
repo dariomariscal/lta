@@ -1,0 +1,128 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ServiceGrid from '@components/ServiceGrid.astro';
+import ServiceCard from '@components/ServiceCard.astro';
+import ImageBand from '@components/ImageBand.astro';
+import ProcessSteps from '@components/ProcessSteps.astro';
+import Button from '@components/Button.astro';
+
+// 02 · Servicios técnicos — los 9 (docs/02)
+const tecnicos = [
+  { num: '01', title: 'Mantenimiento y remodelación', text: 'Rehabilitación de inmuebles en operación, remodelación de espacios comerciales y mantenimiento correctivo y preventivo, con trabajo nocturno o en fin de semana.' },
+  { num: '02', title: 'Obra civil y edificación', text: 'Terracerías, cimentación, estructura, urbanización y obras de drenaje. Incluye obra carretera: alcantarillas, base hidráulica y carpeta asfáltica.' },
+  { num: '03', title: 'Instalaciones', text: 'Eléctricas, hidráulicas, sanitarias y de gas, coordinadas con la obra civil para no romper lo ya terminado.' },
+  { num: '04', title: 'Acabados', text: 'Tablaroca, pasta, texturizados, yeso y pintura. Incluye geometrías curvas, plafones registrables y aplicación en altura mediante andamio o trabajo vertical.' },
+  { num: '05', title: 'Techumbres', text: 'Instalación, sustitución e impermeabilización de cubiertas industriales y comerciales.' },
+  { num: '06', title: 'Herrería y cancelería', text: 'Estructura metálica, carpintería, cancelería de aluminio, malla y cercas perimetrales.' },
+  { num: '07', title: 'Limpieza de fachadas', text: 'Lavado y mantenimiento de fachadas en altura con equipo de acceso por cuerda y personal certificado.' },
+  { num: '08', title: 'Muros verdes y áreas exteriores', text: 'Muros verdes, pasto natural y sintético, y acondicionamiento de áreas exteriores.' },
+  { num: '09', title: 'Torres de enfriamiento y chillers', text: 'Mantenimiento de equipo de climatización industrial y comercial.' },
+];
+
+// 04 · Servicios profesionales — los 6
+const profesionales = [
+  { num: '01', title: 'Topografía', text: 'Brigadas topográficas, levantamientos, trazo, nivelación y control de obra. Peritaje en materia penal.' },
+  { num: '02', title: 'Mecánica de suelos', text: 'Estudios de suelo que determinan el tipo de cimentación y las condiciones de terracería.' },
+  { num: '03', title: 'Licencias y permisos', text: 'Trámite ante autoridades, diseño, supervisión, gerencia de proyectos y supervisión de seguridad.' },
+  { num: '04', title: 'Propuestas para licitación', text: 'Elaboración de propuestas técnicas y económicas para concursos públicos y privados.' },
+  { num: '05', title: 'Obra pública', text: 'Consultoría y administración de contratos de obra pública, incluyendo normatividad de Pemex.' },
+  { num: '06', title: 'Regularización', text: 'Trámites y regularización ante SAT, IMSS e INFONAVIT: requisito para ser proveedor válido de gobierno.' },
+];
+
+// 05 · Cómo trabajamos
+const pasos = [
+  { num: '01', title: 'Contacto', text: 'Nos cuentas qué necesitas, dónde y en qué plazo. Respondemos en 24 horas hábiles.' },
+  { num: '02', title: 'Visita técnica', text: 'Vamos al sitio a levantar condiciones reales. Sin costo dentro de nuestras zonas de cobertura.' },
+  { num: '03', title: 'Propuesta', text: 'Alcance detallado, programa de obra y precio. Lo que no está incluido se dice explícitamente.' },
+  { num: '04', title: 'Ejecución', text: 'Cuadrilla, supervisión y reporte de avance. Coordinamos horarios para no detener tu operación.' },
+];
+---
+
+<BaseLayout
+  title="Servicios · LTA Construcción y Mantenimiento"
+  description="Servicios técnicos y profesionales: obra civil, acabados, instalaciones, mantenimiento, topografía, licencias y obra pública. Un solo contratista."
+>
+  <!-- 01 · Encabezado -->
+  <section class="section section--flush page-hero">
+    <div class="wrap">
+      <p class="mono eyebrow">Servicios</p>
+      <h1 class="page-title" data-reveal-text>Lo que ejecutamos y lo que resolvemos.</h1>
+      <p class="lede" data-reveal>
+        Dos ramas que se complementan: la ejecución física en campo y el trabajo
+        técnico y administrativo que la hace posible. Un solo contratista para ambas.
+      </p>
+    </div>
+  </section>
+
+  <!-- 02 · Servicios técnicos -->
+  <section class="section" aria-labelledby="tec-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="mono numeral">01 / Servicios técnicos</p>
+        <h2 id="tec-h" class="display" data-reveal-text>La ejecución física.</h2>
+      </div>
+      <ServiceGrid>
+        {tecnicos.map((s) => <ServiceCard {...s} />)}
+      </ServiceGrid>
+    </div>
+  </section>
+
+  <!-- 03 · Banda divisoria -->
+  <ImageBand
+    sector="06-topografia"
+    slug="topografia_nivelacion-base-hidraulica"
+    alt="Nivelación con estadal sobre base hidráulica en obra carretera"
+    tag="Servicios topográficos · Control de obra"
+  />
+
+  <!-- 04 · Servicios profesionales -->
+  <section class="section" aria-labelledby="prof-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="mono numeral">02 / Servicios profesionales</p>
+        <h2 id="prof-h" class="display" data-reveal-text>El conocimiento y la gestión.</h2>
+      </div>
+      <ServiceGrid>
+        {profesionales.map((s) => <ServiceCard {...s} />)}
+      </ServiceGrid>
+    </div>
+  </section>
+
+  <!-- 05 · Cómo trabajamos -->
+  <section class="section" aria-labelledby="como-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="mono numeral">03 / Cómo trabajamos</p>
+        <h2 id="como-h" class="display" data-reveal-text>Del primer contacto a la entrega.</h2>
+      </div>
+      <ProcessSteps steps={pasos} />
+    </div>
+  </section>
+
+  <!-- 06 · CTA de cierre -->
+  <section class="section section-cta">
+    <div class="wrap section-cta__in">
+      <h2 class="display" data-reveal-text>¿Listo para cotizar tu obra?</h2>
+      <Button href="/contacto" variant="solid">Solicitar cotización</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    padding-top: var(--s7);
+  }
+  .page-hero .lede {
+    margin-top: var(--s3);
+  }
+  .section-head .numeral {
+    margin-bottom: var(--s1);
+  }
+  .section-cta__in {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s3);
+    text-align: center;
+  }
+</style>
