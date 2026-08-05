@@ -1,16 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 2400">
-  <!-- Favicon LTA — mismo trazo de la marca del nav (src/assets/lta-marca.svg),
-       centrado en un lienzo cuadrado con fondo oscuro de marca. El gris del nav
-       usa currentColor; aquí se fija al claro de marca para contraste en la pestaña. -->
-  <rect width="2400" height="2400" fill="#0E0E0D"/>
-  <g transform="translate(205 727.5)">
-    <!-- L + T + A (una sola figura, contador interno recortado) -->
-    <path
-      fill="#F2F0EC"
-      fill-rule="evenodd"
-      d="M0 0 V945 H849 V376 H566 V189 H1444 L1697 752 H1339 L1250 945 H1990 L1573 0 H377 V566 H655 V752 H190 V0 Z"
-    />
-    <!-- Acento rojo: triángulo delgado (asta interior) -->
-    <path fill="#C8462F" d="M1039 376 H1299 L1039 858 Z" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="LTA">
+  <!-- Favicon LTA — isotipo REAL de la marca (src/components/Logo.astro, variant="mark").
+       Fondo transparente. En tamaños de pestaña los degradados de los biseles se
+       ensucian, así que se usa una tinta sólida + el asta interior terracota,
+       equivalente al tono "mono" del componente.
+
+       Contraste adaptable: la silueta usa la tinta oscura de marca (#1A1A18) en
+       pestañas de tema claro, y la tinta clara (#F2F0EC) en pestañas de tema oscuro,
+       vía prefers-color-scheme. El asta terracota (#B83D27) no cambia.
+
+       El isotipo mide ~292.82 × 124.59 (x:0.99–293.81, y:0.83–125.42). Es apaisado,
+       así que para que LLENE el favicon lo escalamos a que el ancho ocupe casi todo
+       el lienzo (margen ~3px por lado) y lo centramos verticalmente. -->
+  <style>
+    .lta-glyph { fill: #1A1A18; }
+    @media (prefers-color-scheme: dark) {
+      .lta-glyph { fill: #F2F0EC; }
+    }
+  </style>
+  <g transform="translate(2.03 87.5)">
+    <!-- Silueta base de la greca (letras LTA entrelazadas) -->
+    <path class="lta-glyph" d="M75.74,26.97c0-0.67,0.55-1.22,1.22-1.22h113.7c0.67,0,1.45,0.5,1.72,1.11l32.57,72.53c0.27,0.61-0.05,1.11-0.72,1.11h-45.9c-0.67,0-1.45,0.5-1.74,1.11l-10.57,22.71c-0.28,0.61,0.03,1.11,0.71,1.11h96c0.67,0,1-0.5,0.72-1.11L208.51,1.95c-0.27-0.61-1.05-1.11-1.72-1.11H52.05c-0.67,0-1.22,0.55-1.22,1.22v72.31c0,0.67,0.55,1.22,1.22,1.22h34.94c0.67,0,1.22,0.55,1.22,1.22v22.48c0,0.67-0.55,1.22-1.22,1.22H27.13c-0.67,0-1.22-0.55-1.22-1.22V2.05c0-0.67-0.55-1.22-1.22-1.22H2.21c-0.67,0-1.22,0.55-1.22,1.22V124.2c0,0.67,0.55,1.22,1.22,1.22H111.9c0.67,0,1.22-0.55,1.22-1.22V51.89c0-0.67-0.55-1.22-1.22-1.22H76.96c-0.67,0-1.22-0.55-1.22-1.22V26.97z"/>
+    <!-- Asta interior terracota (acento de marca) -->
+    <path fill="#B83D27" d="M172.5,51.41c0.28-0.61-0.03-1.11-0.71-1.11l-32.53,0c-0.67,0-1.22,0.55-1.22,1.22v71.67c0,0.67,0.67,0.78,0.95,0.17L172.5,51.41z"/>
   </g>
 </svg>
