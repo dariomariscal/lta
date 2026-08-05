@@ -1,0 +1,85 @@
+---
+// NavToggle — botón hamburguesa que se transforma en aspa (X).
+// Dos barras que giran 45° en sentidos opuestos alrededor de su centro; el
+// giro alrededor del punto medio hace el aspa perfecta y la transición suave
+// con el easing de la marca. El estado abierto lo controla la clase `is-open`
+// en el <header> (ver MobileMenu para la lógica).
+//
+// Es solo la UI del botón; no lleva lógica de apertura para poder reutilizarse.
+interface Props {
+  /** id del panel que controla, para aria-controls. */
+  controls?: string;
+  class?: string;
+}
+const { controls = 'mobile-menu', class: cls = '' } = Astro.props;
+---
+
+<button
+  class:list={['nav-toggle', cls]}
+  aria-expanded="false"
+  aria-controls={controls}
+  aria-label="Abrir menú"
+>
+  <span class="nav-toggle__box" aria-hidden="true">
+    <span class="nav-toggle__bar"></span>
+    <span class="nav-toggle__bar"></span>
+  </span>
+</button>
+
+<style>
+  .nav-toggle {
+    display: none; /* solo aparece en móvil (lo activa el Header) */
+    position: relative;
+    z-index: 3;
+    width: 44px; /* área táctil mínima recomendada */
+    height: 44px;
+    padding: 0;
+  }
+  .nav-toggle__box {
+    display: block;
+    position: relative;
+    width: 26px;
+    height: 16px;
+    margin: 0 auto;
+  }
+  .nav-toggle__bar {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--concrete);
+    transform-origin: center;
+    transition:
+      transform var(--dur) var(--ease),
+      background var(--dur) var(--ease);
+  }
+  .nav-toggle__bar:nth-child(1) {
+    top: 2px;
+  }
+  .nav-toggle__bar:nth-child(2) {
+    bottom: 2px;
+  }
+
+  /* Estado abierto: las barras se juntan al centro y forman el aspa. */
+  :global(.site-head.is-open) .nav-toggle__bar {
+    background: var(--red);
+  }
+  :global(.site-head.is-open) .nav-toggle__bar:nth-child(1) {
+    transform: translateY(5px) rotate(45deg);
+  }
+  :global(.site-head.is-open) .nav-toggle__bar:nth-child(2) {
+    transform: translateY(-5px) rotate(-45deg);
+  }
+
+  @media (max-width: 900px) {
+    .nav-toggle {
+      display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-toggle__bar {
+      transition: none;
+    }
+  }
+</style>

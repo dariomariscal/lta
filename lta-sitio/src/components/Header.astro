@@ -1,15 +1,15 @@
 ---
-// Header — barra sticky con navegación. Bajo 900px colapsa a menú desplegable.
+// Header — contenedor de la cabecera del sitio. Compone la marca, la
+// navegación de escritorio (Navbar), el botón hamburguesa (NavToggle) y el
+// menú móvil a pantalla completa (MobileMenu).
+//
+// El MobileMenu se monta como HERMANO del <header> (no dentro) para que su
+// overlay fijo cubra la pantalla completa sin quedar atrapado en el contexto
+// de apilamiento del header sticky. Ver notas en MobileMenu.astro.
 import Logo from './Logo.astro';
-const path = Astro.url.pathname;
-const links = [
-  { href: '/', label: 'Inicio' },
-  { href: '/servicios', label: 'Servicios' },
-  { href: '/proyectos', label: 'Proyectos' },
-  { href: '/contacto', label: 'Contacto' },
-];
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
+import Navbar from './Navbar.astro';
+import NavToggle from './NavToggle.astro';
+import MobileMenu from './MobileMenu.astro';
 ---
 
 <header class="site-head">
@@ -18,44 +18,12 @@ const isActive = (href: string) =>
       <Logo variant="mark" height={48} />
     </a>
 
-    <button
-      class="nav-toggle mono"
-      aria-expanded="false"
-      aria-controls="nav"
-      aria-label="Abrir menú"
-    >
-      ≡
-    </button>
-
-    <nav class="nav mono" id="nav">
-      {
-        links.map((l) => (
-          <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>
-            {l.label}
-          </a>
-        ))
-      }
-      <a class="btn mono nav__cta" href="/contacto">Cotizar</a>
-    </nav>
+    <Navbar />
+    <NavToggle controls="mobile-menu" />
   </div>
 </header>
 
-<script>
-  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
-  const nav = document.querySelector<HTMLElement>('#nav');
-  toggle?.addEventListener('click', () => {
-    const open = nav?.classList.toggle('is-open');
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
-  });
-  // Cierra al navegar
-  nav?.querySelectorAll('a').forEach((a) =>
-    a.addEventListener('click', () => {
-      nav.classList.remove('is-open');
-      toggle?.setAttribute('aria-expanded', 'false');
-    }),
-  );
-</script>
+<MobileMenu />
 
 <style>
   .site-head {
@@ -68,12 +36,43 @@ const isActive = (href: string) =>
     background: rgba(250, 248, 244, 0.92);
     backdrop-filter: saturate(160%) blur(6px);
     border-bottom: 1px solid var(--line);
+    transition: background var(--dur) var(--ease);
+  }
+  /* Con el menú abierto: el header se funde con el overlay opaco. Quitamos el
+     backdrop-filter — que crea un plano de composición propio y dejaba al
+     overlay fijo pintarse por encima de la marca y el botón — y volvemos el
+     fondo transparente para que la barra (logo + aspa) quede visible sobre el
+     overlay off-white, sin costura ni borde. */
+  .site-head.is-open {
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom-color: transparent;
   }
   .site-head__in {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    z-index: 2;
+  }
+  /* CLAVE del apilamiento fiable en cualquier posición de scroll:
+     el header es `sticky` (posición de flujo abajo tras el scroll), mientras
+     que el overlay es `fixed` (siempre anclado a la ventana). Comparar el
+     z-index de un sticky contra un fixed es frágil: al hacer scroll, el overlay
+     fijo se pinta sobre la posición de flujo del header y tapa marca + botón.
+
+     Solución: con el menú abierto, sacamos la barra (logo + aspa) del flujo del
+     header y la fijamos nosotros mismos a la ventana. Así comparte el mismo
+     modo de posicionamiento que el overlay (`fixed` vs `fixed`) y su z-index
+     mayor gana de forma determinista, sin importar cuánto se haya bajado. */
+  .site-head.is-open .site-head__in {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 78px;
+    z-index: 60; /* por encima del overlay (.mobile-menu z-45) */
   }
   .brand {
     display: flex;
@@ -85,74 +84,5 @@ const isActive = (href: string) =>
   }
   .brand:hover {
     opacity: 0.82;
-  }
-  .nav {
-    display: flex;
-    align-items: center;
-    gap: var(--s4);
-  }
-  .nav a {
-    color: var(--concrete-2);
-    transition: color var(--dur) var(--ease);
-  }
-  .nav a:hover,
-  .nav a[aria-current='page'] {
-    color: var(--red-2);
-  }
-  .nav__cta {
-    color: var(--concrete);
-  }
-  .btn {
-    border: 1px solid var(--red);
-    padding: 9px 18px;
-    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
-  }
-  .nav a.btn:hover {
-    background: var(--red);
-    color: var(--on-red);
-  }
-  .nav-toggle {
-    display: none;
-    font-size: 24px;
-    line-height: 1;
-    padding: var(--s1);
-  }
-
-  @media (max-width: 900px) {
-    .nav-toggle {
-      display: block;
-    }
-    .nav {
-      position: absolute;
-      top: 78px;
-      left: 0;
-      right: 0;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0;
-      background: var(--ink-2);
-      border-bottom: 1px solid var(--line);
-      padding: var(--s2) var(--margin);
-      transform: translateY(-8px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
-    }
-    .nav.is-open {
-      transform: none;
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .nav a {
-      padding: var(--s2) 0;
-      width: 100%;
-      border-bottom: 1px solid var(--line);
-    }
-    .nav__cta {
-      border: 1px solid var(--red);
-      padding: var(--s2);
-      margin-top: var(--s2);
-      text-align: center;
-    }
   }
 </style>

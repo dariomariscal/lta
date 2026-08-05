@@ -1,0 +1,51 @@
+---
+// Navbar — navegación horizontal de escritorio (enlaces + CTA en línea).
+// Se oculta bajo 900px, donde la navegación pasa al MobileMenu a pantalla completa.
+import { navLinks, navCta, isActive } from '@/data/nav-links';
+const pathname = Astro.url.pathname;
+---
+
+<nav class="nav-desk mono" aria-label="Principal">
+  {
+    navLinks.map((l) => (
+      <a href={l.href} aria-current={isActive(l.href, pathname) ? 'page' : undefined}>
+        {l.label}
+      </a>
+    ))
+  }
+  <a class="btn mono nav-desk__cta" href={navCta.href}>{navCta.label}</a>
+</nav>
+
+<style>
+  .nav-desk {
+    display: flex;
+    align-items: center;
+    gap: var(--s4);
+  }
+  .nav-desk a {
+    color: var(--concrete-2);
+    transition: color var(--dur) var(--ease);
+  }
+  .nav-desk a:hover,
+  .nav-desk a[aria-current='page'] {
+    color: var(--red-2);
+  }
+  .nav-desk__cta {
+    color: var(--concrete);
+  }
+  .btn {
+    border: 1px solid var(--red);
+    padding: 9px 18px;
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  a.btn:hover {
+    background: var(--red);
+    color: var(--on-red);
+  }
+
+  @media (max-width: 900px) {
+    .nav-desk {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,225 @@
+---
+// MobileMenu — menú de navegación a pantalla completa (overlay) para móvil.
+// Cubre toda la vista con tipografía display grande al estilo de estudios de
+// diseño: cada enlace numerado, con revelado escalonado al abrir.
+//
+// Apilamiento (importante): el overlay es `position: fixed` con z-index alto y
+// vive como hermano del header, NO dentro de él. Si estuviera dentro del
+// <header sticky z-index:50>, quedaría atrapado en ese contexto de apilamiento
+// y el contenido de la página (hero) se vería por debajo. Fijo + hermano =
+// cubre la pantalla completa de verdad.
+import { navLinks, navCta, isActive } from '@/data/nav-links';
+const pathname = Astro.url.pathname;
+const id = 'mobile-menu';
+---
+
+<div class="mobile-menu" id={id} inert>
+  <nav class="mobile-menu__nav" aria-label="Menú móvil">
+    <ul class="mobile-menu__list">
+      {
+        navLinks.map((l, i) => (
+          <li class="mobile-menu__item" style={`--i:${i}`}>
+            <a
+              class="mobile-menu__link display"
+              href={l.href}
+              aria-current={isActive(l.href, pathname) ? 'page' : undefined}
+            >
+              <span class="mobile-menu__num mono">{String(i + 1).padStart(2, '0')}</span>
+              <span class="mobile-menu__text">{l.label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a
+      class="mobile-menu__cta btn mono chamfer-br"
+      href={navCta.href}
+      style={`--i:${navLinks.length}`}
+    >
+      Cotizar proyecto
+    </a>
+  </nav>
+</div>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const menu = document.querySelector<HTMLElement>('#mobile-menu');
+  const head = document.querySelector<HTMLElement>('.site-head');
+  const firstLink = menu?.querySelector<HTMLAnchorElement>('a');
+
+  const setOpen = (open: boolean) => {
+    if (!toggle || !menu || !head) return;
+    head.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    // Congela el scroll del cuerpo mientras el menú cubre la pantalla.
+    document.documentElement.classList.toggle('nav-locked', open);
+    // inert quita del foco y del árbol de accesibilidad lo que está oculto.
+    if (open) menu.removeAttribute('inert');
+    else menu.setAttribute('inert', '');
+  };
+
+  toggle?.addEventListener('click', () => {
+    const willOpen = toggle.getAttribute('aria-expanded') !== 'true';
+    setOpen(willOpen);
+    // Al abrir, lleva el foco al primer enlace para navegación con teclado.
+    if (willOpen) requestAnimationFrame(() => firstLink?.focus());
+  });
+
+  // Cierra al elegir un destino.
+  menu?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => setOpen(false)),
+  );
+
+  // Escape cierra y devuelve el foco al botón.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && head?.classList.contains('is-open')) {
+      setOpen(false);
+      toggle?.focus();
+    }
+  });
+
+  // Si la ventana crece a escritorio con el menú abierto, se cierra.
+  const mq = window.matchMedia('(min-width: 901px)');
+  mq.addEventListener('change', (e) => e.matches && setOpen(false));
+</script>
+
+<style>
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 45; /* bajo la barra (site-head z-50) para no tapar marca/botón */
+    background: var(--ink);
+    display: flex;
+    /* Deja libre la altura del header sticky para no tapar la marca ni el botón. */
+    padding: calc(78px + var(--s5)) var(--margin) var(--s5);
+    /* Oculto: se abre con un barrido recto desde arriba (clip-path) —
+       brutalista, sin desvanecidos suaves. */
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition:
+      clip-path var(--dur-slow) var(--ease),
+      opacity var(--dur) var(--ease),
+      visibility 0s linear var(--dur-slow);
+  }
+  :global(.site-head.is-open) ~ .mobile-menu,
+  :global(.site-head.is-open) .mobile-menu {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transition:
+      clip-path var(--dur-slow) var(--ease),
+      opacity var(--dur) var(--ease),
+      visibility 0s;
+  }
+
+  .mobile-menu__nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 100%;
+  }
+  .mobile-menu__list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+  .mobile-menu__item {
+    border-bottom: 1px solid var(--line);
+    /* Revelado escalonado: cada enlace entra un instante después del anterior. */
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur-slow) var(--ease);
+  }
+  :global(.site-head.is-open) ~ .mobile-menu .mobile-menu__item {
+    opacity: 1;
+    transform: none;
+    /* El retraso escala con el índice (--i) — cascada de arriba hacia abajo. */
+    transition-delay: calc(120ms + var(--i) * 70ms);
+  }
+
+  .mobile-menu__link {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s2);
+    padding: var(--s3) 0;
+    color: var(--concrete);
+    font-size: clamp(40px, 13vw, 72px);
+    line-height: 1;
+    transition: color var(--dur) var(--ease);
+  }
+  .mobile-menu__num {
+    color: var(--concrete-4);
+    font-size: 13px;
+    transform: translateY(-0.35em); /* como índice superíndice */
+    transition: color var(--dur) var(--ease);
+  }
+  .mobile-menu__link:hover,
+  .mobile-menu__link[aria-current='page'] {
+    color: var(--red-2);
+  }
+  .mobile-menu__link:hover .mobile-menu__num,
+  .mobile-menu__link[aria-current='page'] .mobile-menu__num {
+    color: var(--red);
+  }
+
+  .mobile-menu__cta {
+    align-self: flex-start;
+    margin-top: var(--s4);
+    padding: var(--s2) var(--s3);
+    color: var(--on-red);
+    background: var(--red);
+    border-color: var(--red);
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur-slow) var(--ease),
+      background var(--dur) var(--ease);
+  }
+  :global(.site-head.is-open) ~ .mobile-menu .mobile-menu__cta {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(120ms + var(--i) * 70ms);
+  }
+  a.mobile-menu__cta:hover {
+    background: var(--red-2);
+  }
+
+  /* Con el menú abierto se congela el scroll del cuerpo. */
+  :global(html.nav-locked),
+  :global(html.nav-locked body) {
+    overflow: hidden;
+  }
+
+  /* En escritorio el overlay nunca se muestra. */
+  @media (min-width: 901px) {
+    .mobile-menu {
+      display: none;
+    }
+  }
+
+  /* Reduce-motion: sin barridos ni cascada, todo visible al instante. */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu {
+      transition: opacity 0.01ms, visibility 0s;
+      clip-path: none;
+    }
+    .mobile-menu__item,
+    .mobile-menu__cta {
+      transition: opacity 0.01ms;
+      transform: none;
+    }
+    :global(.site-head.is-open) ~ .mobile-menu .mobile-menu__item,
+    :global(.site-head.is-open) ~ .mobile-menu .mobile-menu__cta {
+      transition-delay: 0s;
+    }
+  }
+</style>
