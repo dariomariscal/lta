@@ -1,0 +1,257 @@
+---
+// Select — dropdown personalizado (reemplaza el <select> nativo del navegador).
+// Estética brutalista: cero radius, borde técnico, panel negro, acento rojo.
+// Accesible: patrón WAI-ARIA listbox, navegable por teclado (↑ ↓ Home End Enter Esc,
+// búsqueda por primera letra). Guarda el valor en un <input hidden> con el mismo
+// name para que el formulario lo envíe igual que un <select> nativo.
+interface Props {
+  id: string;
+  name: string;
+  options: string[];
+  placeholder?: string;
+  /** Valor inicial (debe coincidir con una opción). */
+  value?: string;
+}
+const { id, name, options, placeholder = 'Selecciona una opción', value = '' } = Astro.props;
+const listId = `${id}-list`;
+---
+
+<div class="select" data-select>
+  <input type="hidden" name={name} value={value} data-select-value />
+  <button
+    type="button"
+    id={id}
+    class="select__trigger mono"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls={listId}
+    data-select-trigger
+  >
+    <span class="select__label" data-select-label data-placeholder={placeholder}>
+      {value || placeholder}
+    </span>
+    <span class="select__chevron" aria-hidden="true">▾</span>
+  </button>
+
+  <ul class="select__panel" id={listId} role="listbox" tabindex="-1" data-select-panel hidden>
+    {
+      options.map((opt) => (
+        <li
+          class="select__option"
+          role="option"
+          data-value={opt}
+          aria-selected={opt === value ? 'true' : 'false'}
+        >
+          {opt}
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .select {
+    position: relative;
+  }
+  .select__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s2);
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line-2);
+    padding: 10px 0;
+    color: var(--concrete);
+    text-align: left;
+    text-transform: none; /* .mono fuerza mayúsculas; el valor va en caja normal */
+    letter-spacing: 0;
+    font-size: 16px;
+    transition: border-color var(--dur) var(--ease);
+  }
+  .select__trigger:focus-visible {
+    outline: none;
+    border-bottom-color: var(--red-2);
+  }
+  /* Cuando el panel está abierto, el borde inferior se marca en rojo. */
+  .select__trigger[aria-expanded='true'] {
+    border-bottom-color: var(--red-2);
+  }
+  /* Muestra el placeholder atenuado mientras no hay selección. */
+  .select__label[data-empty] {
+    color: var(--concrete-4);
+  }
+  .select__chevron {
+    color: var(--concrete-3);
+    font-size: 12px;
+    transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .select__trigger[aria-expanded='true'] .select__chevron {
+    transform: rotate(180deg);
+    color: var(--red-2);
+  }
+
+  .select__panel {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 30;
+    max-height: 280px;
+    overflow-y: auto;
+    background: var(--ink-2);
+    border: 1px solid var(--line-2);
+    padding: 4px 0;
+    /* Scrollbar custom (Firefox): riel oscuro, pulgar en línea enfatizada. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-2) transparent;
+  }
+  /* Scrollbar custom (WebKit/Chromium): cero radius, coherente con el sistema. */
+  .select__panel::-webkit-scrollbar {
+    width: 10px;
+  }
+  .select__panel::-webkit-scrollbar-track {
+    background: var(--ink-3);
+  }
+  .select__panel::-webkit-scrollbar-thumb {
+    background: var(--line-2);
+    border: 2px solid var(--ink-3); /* deja un carril fino alrededor del pulgar */
+  }
+  .select__panel::-webkit-scrollbar-thumb:hover {
+    background: var(--concrete-4);
+  }
+  .select__panel[hidden] {
+    display: none;
+  }
+  .select__option {
+    padding: 10px var(--s2);
+    color: var(--concrete-2);
+    cursor: pointer;
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  /* Fila resaltada (hover del mouse o navegación con teclado). */
+  .select__option:hover,
+  .select__option[data-active] {
+    background: rgba(176, 58, 40, 0.14);
+    color: var(--concrete);
+  }
+  .select__option[aria-selected='true'] {
+    color: var(--red-2);
+  }
+</style>
+
+<script>
+  // Inicializa cada <Select> de la página. Comportamiento compartido, sin
+  // dependencias externas: un listbox accesible sobre un <input hidden>.
+  function initSelect(root: HTMLElement) {
+    const trigger = root.querySelector<HTMLButtonElement>('[data-select-trigger]')!;
+    const panel = root.querySelector<HTMLUListElement>('[data-select-panel]')!;
+    const label = root.querySelector<HTMLElement>('[data-select-label]')!;
+    const hidden = root.querySelector<HTMLInputElement>('[data-select-value]')!;
+    const options = Array.from(panel.querySelectorAll<HTMLLIElement>('.select__option'));
+    const placeholder = label.dataset.placeholder ?? '';
+    let activeIndex = -1;
+
+    const reflectEmpty = () => {
+      if (hidden.value) label.removeAttribute('data-empty');
+      else label.setAttribute('data-empty', '');
+    };
+    reflectEmpty();
+
+    const setActive = (i: number) => {
+      options.forEach((o) => o.removeAttribute('data-active'));
+      activeIndex = i;
+      if (i >= 0) {
+        const el = options[i];
+        el.setAttribute('data-active', '');
+        el.scrollIntoView({ block: 'nearest' });
+      }
+    };
+
+    const open = () => {
+      panel.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      const selected = options.findIndex((o) => o.getAttribute('aria-selected') === 'true');
+      setActive(selected >= 0 ? selected : 0);
+    };
+
+    const close = () => {
+      panel.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      setActive(-1);
+    };
+
+    const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+
+    const choose = (i: number) => {
+      const el = options[i];
+      if (!el) return;
+      const val = el.dataset.value ?? '';
+      options.forEach((o) => o.setAttribute('aria-selected', 'false'));
+      el.setAttribute('aria-selected', 'true');
+      hidden.value = val;
+      label.textContent = val || placeholder;
+      reflectEmpty();
+      hidden.dispatchEvent(new Event('change', { bubbles: true }));
+      close();
+      trigger.focus();
+    };
+
+    trigger.addEventListener('click', () => (isOpen() ? close() : open()));
+
+    options.forEach((el, i) => {
+      el.addEventListener('mouseenter', () => setActive(i));
+      el.addEventListener('click', () => choose(i));
+    });
+
+    trigger.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          if (!isOpen()) open();
+          else setActive(Math.min(activeIndex + 1, options.length - 1));
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          if (!isOpen()) open();
+          else setActive(Math.max(activeIndex - 1, 0));
+          break;
+        case 'Home':
+          if (isOpen()) { e.preventDefault(); setActive(0); }
+          break;
+        case 'End':
+          if (isOpen()) { e.preventDefault(); setActive(options.length - 1); }
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          if (isOpen()) choose(activeIndex);
+          else open();
+          break;
+        case 'Escape':
+          if (isOpen()) { e.preventDefault(); close(); }
+          break;
+        case 'Tab':
+          if (isOpen()) close();
+          break;
+        default:
+          // Búsqueda por primera letra.
+          if (e.key.length === 1 && isOpen()) {
+            const q = e.key.toLowerCase();
+            const from = activeIndex + 1;
+            const order = [...options.slice(from), ...options.slice(0, from)];
+            const match = order.find((o) => (o.textContent ?? '').trim().toLowerCase().startsWith(q));
+            if (match) setActive(options.indexOf(match));
+          }
+      }
+    });
+
+    // Cierra al hacer clic fuera.
+    document.addEventListener('click', (e) => {
+      if (isOpen() && !root.contains(e.target as Node)) close();
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-select]').forEach(initSelect);
+</script>

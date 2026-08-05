@@ -1,6 +1,16 @@
 ---
 // ContactForm — 5 campos. Campos sin caja (solo border-bottom). Formspree.
 // ⚠️ Sustituir TU_ID por el ID real antes de publicar (docs/08, docs/09).
+import Select from '@components/Select.astro';
+
+const tiposProyecto = [
+  'Obra civil o carretera',
+  'Acabados y albañilería',
+  'Instalaciones',
+  'Obra comercial',
+  'Mantenimiento',
+  'Topografía o servicios profesionales',
+];
 ---
 
 <form class="form" action="https://formspree.io/f/TU_ID" method="POST">
@@ -21,15 +31,7 @@
 
   <div class="form__field">
     <label class="mono" for="tipo">Tipo de proyecto</label>
-    <select id="tipo" name="tipo">
-      <option value="">Selecciona una opción</option>
-      <option>Obra civil o carretera</option>
-      <option>Acabados y albañilería</option>
-      <option>Instalaciones</option>
-      <option>Obra comercial</option>
-      <option>Mantenimiento</option>
-      <option>Topografía o servicios profesionales</option>
-    </select>
+    <Select id="tipo" name="tipo" options={tiposProyecto} />
   </div>
 
   <div class="form__field">
@@ -55,8 +57,7 @@
   .form__field label {
     color: var(--concrete-4);
   }
-  .form__field input,
-  .form__field select {
+  .form__field input {
     background: transparent;
     border: 0;
     border-bottom: 1px solid var(--line-2);
@@ -67,14 +68,9 @@
   .form__field input::placeholder {
     color: var(--concrete-4);
   }
-  .form__field input:focus,
-  .form__field select:focus {
+  .form__field input:focus {
     outline: none;
     border-bottom-color: var(--red-2);
-  }
-  .form__field select option {
-    background: var(--ink);
-    color: var(--concrete);
   }
   .btn {
     padding: 11px 22px;

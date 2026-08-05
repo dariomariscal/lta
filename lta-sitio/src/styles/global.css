@@ -101,9 +101,9 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
 
 .mono {
   font-family: var(--font-mono);
-  font-weight: 400;
-  font-size: 11px;
-  letter-spacing: .08em;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: .04em;
   text-transform: uppercase;
   line-height: 1.4;
 }
