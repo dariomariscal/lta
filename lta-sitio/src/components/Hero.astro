@@ -1,6 +1,7 @@
 ---
 // Hero — layout dividido: texto a la izquierda, imagen a la derecha. En móvil
-// la imagen pasa arriba y el texto abajo. Text reveal con máscara en el titular.
+// una sola columna: el texto va primero y la imagen debajo. Text reveal con
+// máscara en el titular.
 // Franja de estadísticas en mono. Un solo CTA primario.
 import Button from './Button.astro';
 import SpecList from './SpecList.astro';
@@ -115,10 +116,8 @@ const base = `/img/${image.sector}/${image.slug}`;
       grid-template-columns: 1fr;
       gap: var(--s4);
     }
-    /* En móvil la imagen va arriba del texto. */
-    .hero__media {
-      order: -1;
-    }
+    /* En móvil el texto va primero (orden natural del DOM); la imagen queda
+       debajo del copy. */
     .hero__copy {
       max-width: none;
     }
