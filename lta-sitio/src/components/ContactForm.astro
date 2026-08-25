@@ -58,6 +58,12 @@ const tiposProyecto = [
     color: var(--concrete-4);
   }
   .form__field input {
+    /* width:100% + box-sizing evitan que el ancho intrínseco del <input> (o su
+       placeholder largo) desborde el contenedor y provoque scroll horizontal
+       en móvil. min-width:0 permite que encoja dentro del flex. */
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     background: transparent;
     border: 0;
     border-bottom: 1px solid var(--line-2);

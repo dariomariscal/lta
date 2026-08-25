@@ -34,9 +34,14 @@ const { rows, light = false, animate = false } = Astro.props;
   }
   .spec__k {
     flex: 0 0 128px;
+    min-width: 0;
     color: var(--concrete-3);
   }
   .spec__v {
+    /* min-width:0 + overflow-wrap dejan que valores largos (correos, direcciones)
+       rompan de línea en vez de desbordar y provocar scroll horizontal en móvil. */
+    min-width: 0;
+    overflow-wrap: anywhere;
     color: var(--concrete);
   }
   .spec--light .spec__k {

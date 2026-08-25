@@ -157,7 +157,10 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
 .section-head__aside { grid-column: span 3; align-self: end; }
 
 @media (max-width: 900px) {
-  .grid8 { grid-template-columns: 1fr; }
+  /* minmax(0,1fr) — no `1fr` (= minmax(auto,1fr)): con auto, un hijo de ancho
+     intrínseco grande fuerza el track más ancho que el viewport y provoca
+     scroll horizontal. Con 0 el track sí encoge. */
+  .grid8 { grid-template-columns: minmax(0, 1fr); }
   .section-head__title,
   .section-head__aside { grid-column: 1; }
 }
