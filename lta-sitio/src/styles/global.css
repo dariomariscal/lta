@@ -67,7 +67,9 @@ body {
   color: var(--concrete);
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: 16px;
+  /* Base 18px (antes 16px): el sitio lo consulta gente mayor y pedían textos
+     más legibles. Toda la escala relativa hereda de aquí. */
+  font-size: 18px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -107,18 +109,20 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
 }
 
 .lede {
-  font-size: clamp(17px, 1.5vw, 21px);
+  font-size: clamp(19px, 1.6vw, 23px);
   line-height: 1.55;
   color: var(--concrete-2);
   max-width: 60ch;
 }
 
-.body { font-size: 16px; line-height: 1.6; max-width: 66ch; }
+.body { font-size: 18px; line-height: 1.6; max-width: 66ch; }
 
 .mono {
   font-family: var(--font-mono);
   font-weight: 500;
-  font-size: 12px;
+  /* 14px (antes 12px) — las etiquetas mono (ESTADOS, SECTORES, eyebrows…)
+     eran lo más difícil de leer para gente mayor. */
+  font-size: 14px;
   letter-spacing: .04em;
   text-transform: uppercase;
   line-height: 1.4;

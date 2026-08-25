@@ -16,13 +16,21 @@ interface Props {
 }
 const { eyebrow, title, sub, image, cta, stats } = Astro.props;
 const base = `/img/${image.sector}/${image.slug}`;
+// El título puede traer saltos de línea explícitos (\n) para fijar cómo se
+// reparte en renglones y que NO cambie con el ancho de la pantalla. Cada línea
+// se marca con data-line para que la animación de reveal respete esos saltos.
+const titleLines = title.split('\n');
 ---
 
 <section class="hero">
   <div class="hero__in wrap">
     <div class="hero__copy">
       <span class="mono eyebrow">{eyebrow}</span>
-      <h1 class="display hero__title" data-reveal-text>{title}</h1>
+      <h1 class="display hero__title" data-reveal-text>
+        {titleLines.map((line, i) => (
+          <span class="hero__title-line" data-line>{i > 0 && <br />}{line}</span>
+        ))}
+      </h1>
       <p class="lede hero__sub" data-reveal>{sub}</p>
       <div class="hero__cta" data-reveal>
         <Button href={cta.href} variant="solid">{cta.label}</Button>
@@ -69,6 +77,16 @@ const base = `/img/${image.sector}/${image.slug}`;
   }
   .hero__title {
     margin-bottom: var(--s3);
+    /* Equilibra por si acaso, pero los saltos reales los fijan los <br>. */
+    text-wrap: balance;
+  }
+  /* Cada línea del título ocupa su propio renglón (el <br> ya la separa) y no
+     se parte por dentro: así el titular siempre conserva los mismos renglones
+     definidos en la página, sin importar el ancho de la pantalla. El clamp del
+     .display reduce el tamaño en pantallas estrechas para que quepa. */
+  .hero__title-line {
+    display: inline;
+    white-space: nowrap;
   }
   .hero__sub {
     max-width: 52ch;

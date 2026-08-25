@@ -31,6 +31,9 @@ import MobileMenu from './MobileMenu.astro';
     top: 0;
     z-index: 50;
     height: 78px;
+    /* Recorta el derrame de 50vw del panel naranja del navbar (Navbar.astro)
+       para que llegue al borde derecho sin generar scroll horizontal. */
+    overflow: hidden;
     /* Velo del mismo off-white del fondo (250,248,244) — evita una banda de
        blanco puro más brillante que el resto de la página al hacer scroll. */
     background: rgba(250, 248, 244, 0.92);
@@ -55,6 +58,31 @@ import MobileMenu from './MobileMenu.astro';
     justify-content: space-between;
     position: relative;
     z-index: 2;
+  }
+  /* En móvil no hay barra de enlaces (nav-desk oculto), así que el panel naranja
+     con corte diagonal se pinta aquí como pseudo-elemento: arranca cerca del
+     logo con la diagonal "/" a la izquierda y se derrama hasta el borde derecho
+     de la ventana. El botón hamburguesa (z-index propio) queda encima. */
+  .site-head__in::after {
+    content: '';
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 140px; /* después del logo */
+    right: calc(var(--margin) * -1);
+    background: var(--red);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, var(--chamfer-photo) 100%);
+    z-index: 1;
+  }
+  @media (max-width: 900px) {
+    .site-head__in::after {
+      display: block;
+    }
+    /* Con el menú abierto el panel estorba (el overlay ya cubre todo). */
+    .site-head.is-open .site-head__in::after {
+      display: none;
+    }
   }
   /* CLAVE del apilamiento fiable en cualquier posición de scroll:
      el header es `sticky` (posición de flujo abajo tras el scroll), mientras

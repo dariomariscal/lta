@@ -75,6 +75,11 @@ const { controls = 'mobile-menu', class: cls = '' } = Astro.props;
     .nav-toggle {
       display: block;
     }
+    /* Sobre el panel naranja del header móvil, las barras van en blanco (salvo
+       con el menú abierto, que vuelven a rojo sobre el overlay off-white). */
+    :global(.site-head:not(.is-open)) .nav-toggle__bar {
+      background: var(--on-red);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

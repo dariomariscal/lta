@@ -18,9 +18,30 @@ const pathname = Astro.url.pathname;
 
 <style>
   .nav-desk {
+    /* Panel naranja terracota que arranca casi pegado al logo y se extiende
+       hasta el borde derecho de la pantalla, con corte diagonal SOLO en el
+       borde izquierdo. La diagonal va en el ángulo opuesto (esquina inferior
+       izquierda recortada, tipo "/"), como el logo. Los enlaces se alinean a
+       la derecha; el texto va en blanco. */
+    flex: 1;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: var(--s4);
+    align-self: stretch;
+    background: var(--red);
+    color: var(--on-red);
+    /* El panel empieza cerca del logo (margen izquierdo pequeño) y se derrama
+       ampliamente hasta el borde derecho de la ventana. Como el .wrap tiene
+       max-width y se centra, no basta con anular sólo el padding: extendemos
+       50vw a la derecha y el header lo recorta con overflow. El padding
+       izquierdo compensa la diagonal; el derecho realinea los enlaces al
+       margen visual. */
+    margin-left: var(--s1);
+    margin-right: -50vw;
+    padding-left: calc(var(--chamfer-photo) + var(--s4));
+    padding-right: calc(50vw + var(--margin));
+    clip-path: polygon(0 0, 100% 0, 100% 100%, var(--chamfer-photo) 100%);
   }
   .nav-desk a {
     /* Mismo carácter fuerte que los enlaces del menú móvil (.display):
@@ -29,28 +50,34 @@ const pathname = Astro.url.pathname;
     font-weight: 700;
     font-size: 20px;
     letter-spacing: 0.01em;
-    color: var(--concrete-2);
-    transition: color var(--dur) var(--ease);
+    color: var(--on-red);
+    transition: color var(--dur) var(--ease), opacity var(--dur) var(--ease);
   }
-  /* El CTA se excluye: tiene su propio hover (fondo rojo + texto claro). Sin
-     esta exclusión, este `color: red` empataría en especificidad con el del
-     botón y, según el orden de fuente, podía pintar texto rojo sobre fondo
-     rojo — ilegible. */
+  /* Sobre el panel naranja no podemos teñir en rojo; el activo/hover se marca
+     con blanco pleno + subrayado, y los inactivos quedan ligeramente atenuados. */
+  .nav-desk a:not(.nav-desk__cta) {
+    opacity: 0.85;
+  }
   .nav-desk a:not(.nav-desk__cta):hover,
   .nav-desk a[aria-current='page'] {
-    color: var(--red-2);
+    color: var(--on-red);
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
   }
   .nav-desk__cta {
-    color: var(--concrete);
+    color: var(--on-red);
   }
+  /* CTA: borde blanco sobre el naranja; al hover se invierte (fondo blanco). */
   .btn {
-    border: 1px solid var(--red);
+    border: 1px solid var(--on-red);
     padding: 9px 18px;
     transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
   }
   a.btn:hover {
-    background: var(--red);
-    color: var(--on-red);
+    background: var(--on-red);
+    color: var(--red);
   }
 
   @media (max-width: 900px) {

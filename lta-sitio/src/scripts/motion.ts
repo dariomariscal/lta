@@ -128,6 +128,29 @@ export function initMotion(): void {
  * La línea externa recorta (overflow hidden) y la interna se anima.
  */
 function splitIntoLines(el: HTMLElement): void {
+  // Caso 1: saltos de línea EXPLÍCITOS. Si el markup ya define las líneas con
+  // elementos [data-line], las respetamos tal cual (no medimos el wrap del
+  // navegador). Así el título del hero siempre conserva los mismos renglones,
+  // sin importar el ancho de la pantalla.
+  const explicit = el.querySelectorAll<HTMLElement>('[data-line]');
+  if (explicit.length > 0) {
+    const lineTexts = Array.from(explicit).map((n) => (n.textContent ?? '').trim());
+    el.textContent = '';
+    lineTexts.forEach((t) => {
+      const outer = document.createElement('span');
+      outer.className = 'line';
+      outer.style.display = 'block';
+      outer.style.overflow = 'hidden';
+      const inner = document.createElement('span');
+      inner.className = 'line-inner';
+      inner.textContent = t;
+      outer.appendChild(inner);
+      el.appendChild(outer);
+    });
+    return;
+  }
+
+  // Caso 2: sin saltos explícitos → medimos el wrap real del navegador.
   const text = el.textContent ?? '';
   const words = text.trim().split(/\s+/);
   el.textContent = '';
