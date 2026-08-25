@@ -3,11 +3,11 @@
 // iluminados en naranja terracota. No se menciona el número de estados: el
 // mapa comunica la presencia y el mensaje "sin fronteras" sugiere expansión.
 //
-// El SVG (public/mx.svg, de simplemaps) trae un <path> por estado con id tipo
-// MXCMX, MXMIC, etc. Lo leemos en build-time y lo inyectamos; luego el CSS de
-// abajo colorea sólo los IDs activos.
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+// El SVG (src/assets/mx.svg, de simplemaps) trae un <path> por estado con id
+// tipo MXCMX, MXMIC, etc. Lo importamos como texto con ?raw (Vite lo empaqueta
+// en build-time, sin depender de rutas del filesystem en runtime) y lo
+// inyectamos; luego el CSS de abajo colorea sólo los IDs activos.
+import mapaRaw from '../assets/mx.svg?raw';
 
 // IDs de los estados con obra documentada (simplemaps ISO-3166-2 de México).
 const activos = [
@@ -25,10 +25,9 @@ const activos = [
 // Algunos lugares a destacar como texto (muestra, sin ser lista exhaustiva).
 const lugares = ['Ciudad de México', 'Quintana Roo', 'Michoacán', 'Oaxaca', 'Sinaloa'];
 
-// Leemos el SVG del mapa desde /public y marcamos los paths activos añadiéndoles
-// data-activo, para que el CSS los pinte en terracota.
-const svgPath = fileURLToPath(new URL('../../public/mx.svg', import.meta.url));
-let mapa = readFileSync(svgPath, 'utf-8');
+// Marcamos los paths activos añadiéndoles data-activo, para que el CSS los pinte
+// en terracota.
+let mapa = mapaRaw;
 // Quitamos el fill/stroke inline que trae el <svg> raíz (verde de simplemaps):
 // así los estados heredan el color desde nuestro CSS sin pelear con la cascada.
 mapa = mapa.replace(/(<svg\b[^>]*?)\sfill="[^"]*"/, '$1');
