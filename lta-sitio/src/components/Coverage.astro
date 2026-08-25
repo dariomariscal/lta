@@ -1,51 +1,204 @@
 ---
-// Coverage — retícula de 9 estados con numeral en rojo. Sin mapa SVG: el
-// tratamiento tipográfico es más honesto y coherente con la estética técnica.
-const estados = [
-  'Ciudad de México', 'Estado de México', 'Michoacán',
-  'Quintana Roo', 'Nayarit', 'Guerrero',
-  'Oaxaca', 'Chiapas', 'Sinaloa',
+// Coverage — mapa de México con los estados donde LTA ya ha ejecutado obra
+// iluminados en naranja terracota. No se menciona el número de estados: el
+// mapa comunica la presencia y el mensaje "sin fronteras" sugiere expansión.
+//
+// El SVG (public/mx.svg, de simplemaps) trae un <path> por estado con id tipo
+// MXCMX, MXMIC, etc. Lo leemos en build-time y lo inyectamos; luego el CSS de
+// abajo colorea sólo los IDs activos.
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+// IDs de los estados con obra documentada (simplemaps ISO-3166-2 de México).
+const activos = [
+  { id: 'MXCMX', nombre: 'Ciudad de México' },
+  { id: 'MXMEX', nombre: 'Estado de México' },
+  { id: 'MXMIC', nombre: 'Michoacán' },
+  { id: 'MXROO', nombre: 'Quintana Roo' },
+  { id: 'MXNAY', nombre: 'Nayarit' },
+  { id: 'MXGRO', nombre: 'Guerrero' },
+  { id: 'MXOAX', nombre: 'Oaxaca' },
+  { id: 'MXCHP', nombre: 'Chiapas' },
+  { id: 'MXSIN', nombre: 'Sinaloa' },
 ];
+
+// Algunos lugares a destacar como texto (muestra, sin ser lista exhaustiva).
+const lugares = ['Ciudad de México', 'Quintana Roo', 'Michoacán', 'Oaxaca', 'Sinaloa'];
+
+// Leemos el SVG del mapa desde /public y marcamos los paths activos añadiéndoles
+// data-activo, para que el CSS los pinte en terracota.
+const svgPath = fileURLToPath(new URL('../../public/mx.svg', import.meta.url));
+let mapa = readFileSync(svgPath, 'utf-8');
+// Quitamos el fill/stroke inline que trae el <svg> raíz (verde de simplemaps):
+// así los estados heredan el color desde nuestro CSS sin pelear con la cascada.
+mapa = mapa.replace(/(<svg\b[^>]*?)\sfill="[^"]*"/, '$1');
+mapa = mapa.replace(/(<svg\b[^>]*?)\sstroke="[^"]*"/, '$1');
+for (const { id, nombre } of activos) {
+  // Insertamos data-activo y data-nombre en el <path id="MXxxx" ...>. El nombre
+  // alimenta el tooltip que aparece al pasar el cursor (ver script abajo).
+  mapa = mapa.replace(
+    new RegExp(`(<path[^>]*\\bid="${id}")`),
+    `$1 data-activo="" data-nombre="${nombre}" tabindex="0" role="img" aria-label="${nombre} — obra ejecutada"`
+  );
+}
 ---
 
-<ul class="coverage" data-reveal-group>
-  {
-    estados.map((e, i) => (
-      <li class="coverage__cell" data-reveal>
-        <span class="mono numeral">{String(i + 1).padStart(2, '0')}</span>
-        <span class="coverage__name">{e}</span>
-      </li>
-    ))
-  }
-</ul>
+<div class="coverage" data-reveal>
+  <div class="coverage__mapwrap">
+    <div class="coverage__map" set:html={mapa} />
+    <span class="coverage__tip mono" role="tooltip" hidden></span>
+  </div>
+  <ul class="coverage__places mono">
+    {lugares.map((l) => <li class="coverage__place">{l}</li>)}
+    <li class="coverage__place coverage__place--more">y más</li>
+  </ul>
+</div>
+
+<script>
+  // Tooltip + resaltado al pasar el cursor por los estados con obra. Solo los
+  // paths con [data-activo] reaccionan (el resto del mapa es estático).
+  document.querySelectorAll<HTMLElement>('.coverage__mapwrap').forEach((wrap) => {
+    const tip = wrap.querySelector<HTMLElement>('.coverage__tip');
+    if (!tip) return;
+    const estados = wrap.querySelectorAll<SVGPathElement>('path[data-activo]');
+
+    const show = (nombre: string) => {
+      tip.textContent = nombre;
+      tip.hidden = false;
+    };
+    const move = (e: PointerEvent | MouseEvent) => {
+      const r = wrap.getBoundingClientRect();
+      tip.style.left = `${e.clientX - r.left}px`;
+      tip.style.top = `${e.clientY - r.top}px`;
+    };
+    const hide = () => {
+      tip.hidden = true;
+    };
+
+    estados.forEach((path) => {
+      const nombre = path.getAttribute('data-nombre') ?? '';
+      path.addEventListener('pointerenter', () => show(nombre));
+      path.addEventListener('pointermove', move);
+      path.addEventListener('pointerleave', hide);
+      // Accesible por teclado: al enfocar, muestra el nombre centrado en el path.
+      path.addEventListener('focus', () => {
+        const r = wrap.getBoundingClientRect();
+        const b = path.getBoundingClientRect();
+        tip.style.left = `${b.left + b.width / 2 - r.left}px`;
+        tip.style.top = `${b.top + b.height / 2 - r.top}px`;
+        show(nombre);
+      });
+      path.addEventListener('blur', hide);
+    });
+  });
+</script>
 
 <style>
   .coverage {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--line);
+    grid-template-columns: 1.6fr 1fr;
+    gap: var(--s5);
+    align-items: center;
     border: 1px solid var(--line);
-  }
-  .coverage__cell {
     background: var(--ink);
-    padding: var(--s3);
+    padding: var(--s4);
+  }
+
+  /* El SVG se ajusta al ancho de su columna. Estados inactivos en un gris
+     concreto definido (para que la silueta completa de México se lea sobre el
+     fondo claro) con trazo claro que separa cada estado; los activos, en
+     naranja terracota de la marca. */
+  .coverage__map :global(svg) {
+    width: 100%;
+    height: auto;
+    max-height: 460px;
+    display: block;
+    stroke: var(--ink);
+    stroke-width: 1.4;
+  }
+  .coverage__map :global(path) {
+    fill: var(--line-2);
+    transition: fill var(--dur) var(--ease);
+  }
+  /* Estados con obra: terracota. Doble regla (elemento + data) para ganar al
+     fill que trae inline el <svg>. */
+  .coverage__map :global(path[data-activo]) {
+    fill: var(--red);
+    cursor: pointer;
+    outline: none;
+  }
+  /* Hover/focus en un estado con obra: se aclara al tono de acento y sube el
+     trazo para despegarlo de sus vecinos. */
+  .coverage__map :global(path[data-activo]:hover),
+  .coverage__map :global(path[data-activo]:focus-visible) {
+    fill: var(--red-2);
+    stroke: var(--concrete);
+    stroke-width: 1.4;
+  }
+
+  /* Contenedor relativo para anclar el tooltip flotante. */
+  .coverage__mapwrap {
+    position: relative;
+  }
+  /* Tooltip con el nombre del estado; sigue al cursor (posición vía JS). */
+  .coverage__tip {
+    position: absolute;
+    z-index: 3;
+    transform: translate(-50%, -140%);
+    background: var(--concrete);
+    color: var(--ink);
+    padding: 4px 9px;
+    font-size: 13px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .coverage__tip[hidden] {
+    display: none;
+  }
+  /* Los "points"/labels del SVG original no nos interesan: los ocultamos. */
+  .coverage__map :global(#points),
+  .coverage__map :global(#label_points),
+  .coverage__map :global(circle) {
+    display: none;
+  }
+
+  .coverage__places {
     display: flex;
     flex-direction: column;
-    gap: var(--s1);
-    min-height: 128px;
-    justify-content: space-between;
+    gap: var(--s2);
   }
-  .coverage__name {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(20px, 2.4vw, 30px);
-    line-height: 1;
-    text-transform: uppercase;
+  .coverage__place {
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: var(--concrete-2);
+    padding-left: var(--s3);
+    position: relative;
   }
-  @media (max-width: 640px) {
+  /* Viñeta cuadrada terracota, guiño a los estados iluminados. */
+  .coverage__place::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.35em;
+    width: 10px;
+    height: 10px;
+    background: var(--red);
+  }
+  .coverage__place--more {
+    color: var(--concrete-4);
+  }
+  .coverage__place--more::before {
+    background: var(--concrete-4);
+  }
+
+  @media (max-width: 760px) {
     .coverage {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
+      gap: var(--s4);
+    }
+    .coverage__places {
+      flex-flow: row wrap;
+      gap: var(--s2) var(--s4);
     }
   }
 </style>
