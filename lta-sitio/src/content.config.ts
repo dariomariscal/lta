@@ -3,7 +3,9 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 /**
- * Colección de proyectos — las 14 fichas del portafolio (lta-docs/docs/07).
+ * Colección de proyectos — fichas del portafolio (lta-docs/docs/07). Es una
+ * muestra representativa, no un catálogo exhaustivo: LTA no comunica un número
+ * específico de obras, así que ni la UI ni este esquema fijan un total.
  * Cada ficha alimenta la retícula y la ventana de detalle en /proyectos.
  * Los slugs de foto apuntan a los archivos reales del inventario, sin el
  * sufijo de tamaño ni la extensión (ej. "michoacan_tren-de-pavimentacion").

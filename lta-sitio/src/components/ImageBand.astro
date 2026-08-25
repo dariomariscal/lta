@@ -11,7 +11,7 @@ interface Props {
 const { sector, slug, alt, tag } = Astro.props;
 ---
 
-<section class="band diagonal-r">
+<section class="band">
   <Picture
     sector={sector}
     slug={slug}
@@ -37,10 +37,13 @@ const { sector, slug, alt, tag } = Astro.props;
     object-fit: cover;
   }
   .band__tag {
+    /* Franja naranja de la marca con texto blanco: legible sobre cualquier
+       foto (antes usaba mix-blend-mode y desaparecía sobre imágenes claras). */
     position: absolute;
     left: var(--margin);
     bottom: var(--s3);
     color: #fff;
-    mix-blend-mode: difference;
+    background: var(--red);
+    padding: 6px 12px;
   }
 </style>

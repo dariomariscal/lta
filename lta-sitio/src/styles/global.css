@@ -49,6 +49,7 @@
      El chaflán es un corte a 45° de tamaño fijo; la diagonal es un ángulo suave. */
   --chamfer:      24px;  /* corte de esquina de bloques y fotos */
   --chamfer-lg:   40px;  /* corte grande para paneles del hero */
+  --chamfer-photo: 56px; /* corte pronunciado de las fotos (sup-der + inf-izq) */
   --diagonal:     56px;  /* desplazamiento del corte diagonal de banda/hero */
 }
 
@@ -172,7 +173,10 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
 
 /* -------- Superficies -------- */
 .surface { background: var(--ink-2); border: 1px solid var(--line); }
-.media-box { background: var(--ink-3); display: block; overflow: hidden; }
+/* Sin fondo: las imágenes siempre cubren su caja (object-fit:cover), así que no
+   debe asomar ningún relleno gris detrás de ellas. LTA prefiere recorte antes
+   que espacios vacíos. */
+.media-box { background: transparent; display: block; overflow: hidden; }
 
 /* -------- Foco visible (obligatorio, no eliminar) -------- */
 :focus-visible {
@@ -205,10 +209,11 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
   clip-path: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer),
                      100% 100%, 0 100%);
 }
-/* Foto biselada: dos esquinas opuestas cortadas, como las fotos del Book. */
+/* Foto biselada: dos esquinas opuestas cortadas (diagonal a la izquierda:
+   superior-derecha + inferior-izquierda), con corte pronunciado. */
 .chamfer-photo {
-  clip-path: polygon(var(--chamfer) 0, 100% 0, 100% calc(100% - var(--chamfer)),
-                     calc(100% - var(--chamfer)) 100%, 0 100%, 0 var(--chamfer));
+  clip-path: polygon(0 0, calc(100% - var(--chamfer-photo)) 0, 100% var(--chamfer-photo),
+                     100% 100%, var(--chamfer-photo) 100%, 0 calc(100% - var(--chamfer-photo)));
 }
 /* Corte diagonal de banda: el lado derecho baja en ángulo (portada del Book). */
 .diagonal-r {
@@ -218,7 +223,7 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
 
 @media (max-width: 900px) {
   /* En móvil los chaflanes se achican para no comerse contenido estrecho. */
-  :root { --chamfer: 16px; --chamfer-lg: 24px; --diagonal: 32px; }
+  :root { --chamfer: 16px; --chamfer-lg: 24px; --chamfer-photo: 36px; --diagonal: 32px; }
 }
 
 /* ============================================================================

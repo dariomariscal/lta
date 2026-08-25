@@ -1,11 +1,8 @@
 ---
-// ProjectFilters — 7 botones de sector con etiquetas reales + conteo en vivo.
-// Estado activo vía aria-pressed. El conteo se anuncia con aria-live.
-interface Props {
-  total: number;
-}
-const { total } = Astro.props;
-
+// ProjectFilters — 7 botones de sector con etiquetas reales + rótulo en vivo.
+// Estado activo vía aria-pressed. El rótulo se anuncia con aria-live.
+// LTA no comunica un número específico de obras: el portafolio es una muestra,
+// no un conteo, así que el rótulo es cualitativo (sin cifras).
 const filtros = [
   { cat: 'todos', label: 'Todos' },
   { cat: 'infraestructura', label: 'Infraestructura carretera' },
@@ -31,7 +28,7 @@ const filtros = [
       ))
     }
   </div>
-  <p class="mono filters__count" data-proj-count aria-live="polite">{total} proyectos</p>
+  <p class="mono filters__count" data-proj-count aria-live="polite">Una muestra de nuestro trabajo</p>
 </div>
 
 <style>
