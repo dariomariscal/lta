@@ -49,7 +49,7 @@
      El chaflán es un corte a 45° de tamaño fijo; la diagonal es un ángulo suave. */
   --chamfer:      24px;  /* corte de esquina de bloques y fotos */
   --chamfer-lg:   40px;  /* corte grande para paneles del hero */
-  --chamfer-photo: 56px; /* corte pronunciado de las fotos (sup-der + inf-izq) */
+  --chamfer-photo: 56px; /* corte pronunciado de las fotos (solo sup-der) */
   --diagonal:     56px;  /* desplazamiento del corte diagonal de banda/hero */
 }
 
@@ -216,11 +216,11 @@ h3.display { font-size: clamp(24px, 3vw, 42px); font-weight: 600; }
   clip-path: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer),
                      100% 100%, 0 100%);
 }
-/* Foto biselada: dos esquinas opuestas cortadas (diagonal a la izquierda:
-   superior-derecha + inferior-izquierda), con corte pronunciado. */
+/* Foto biselada: solo la esquina superior-derecha cortada, con corte
+   pronunciado. */
 .chamfer-photo {
   clip-path: polygon(0 0, calc(100% - var(--chamfer-photo)) 0, 100% var(--chamfer-photo),
-                     100% 100%, var(--chamfer-photo) 100%, 0 calc(100% - var(--chamfer-photo)));
+                     100% 100%, 0 100%);
 }
 /* Corte diagonal de banda: el lado derecho baja en ángulo (portada del Book). */
 .diagonal-r {
@@ -244,8 +244,17 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
-/* Revelado de texto por líneas: la línea se oculta tras una máscara y sube */
-[data-reveal-text] .line-inner { display: inline-block; will-change: transform; }
+/* Revelado de texto por líneas: la línea se oculta tras una máscara y sube.
+   La máscara (.line) recorta con overflow:hidden; con line-height ajustado los
+   glifos altos como «¿» sobresalen por arriba y se cortarían. Damos holgura
+   vertical al inner y compensamos la máscara con márgenes negativos para no
+   alterar el interlineado visible. */
+[data-reveal-text] .line { margin-block: -0.12em; }
+[data-reveal-text] .line-inner {
+  display: inline-block;
+  padding-block: 0.12em;
+  will-change: transform;
+}
 
 /* Revelado de bloque (tarjetas, párrafos): fade + subida */
 [data-reveal] { opacity: 0; transform: translateY(24px); will-change: transform, opacity; }

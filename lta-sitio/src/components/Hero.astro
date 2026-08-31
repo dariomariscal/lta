@@ -12,7 +12,7 @@ interface Props {
   sub: string;
   image: { sector: string; slug: string; alt: string };
   cta: { href: string; label: string };
-  stats: { k: string; v: string }[];
+  stats?: { k: string; v: string }[];
 }
 const { eyebrow, title, sub, image, cta, stats } = Astro.props;
 const base = `/img/${image.sector}/${image.slug}`;
@@ -35,9 +35,11 @@ const titleLines = title.split('\n');
       <div class="hero__cta" data-reveal>
         <Button href={cta.href} variant="solid">{cta.label}</Button>
       </div>
-      <div class="hero__stats">
-        <SpecList rows={stats} animate />
-      </div>
+      {stats && stats.length > 0 && (
+        <div class="hero__stats">
+          <SpecList rows={stats} animate />
+        </div>
+      )}
     </div>
 
     <figure class="hero__media chamfer-photo" data-reveal>

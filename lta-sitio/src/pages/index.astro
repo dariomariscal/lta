@@ -5,7 +5,6 @@ import ClientLogos from '@components/ClientLogos.astro';
 import ServiceGrid from '@components/ServiceGrid.astro';
 import ServiceCard from '@components/ServiceCard.astro';
 import ImageBand from '@components/ImageBand.astro';
-import FeatureCard from '@components/FeatureCard.astro';
 import Masonry from '@components/Masonry.astro';
 import Coverage from '@components/Coverage.astro';
 import Button from '@components/Button.astro';
@@ -60,12 +59,6 @@ const jsonld = {
     sub="Infraestructura carretera, hotelería, retail y obra pública. Trabajamos fuera de horario cuando la operación del cliente no puede detenerse."
     image={{ sector: '01-infraestructura-carretera', slug: 'michoacan_vista-aerea-ampliacion', alt: 'Vista aérea de la ampliación carretera en Michoacán ejecutada por LTA' }}
     cta={{ href: '/contacto', label: 'Solicitar cotización' }}
-    stats={[
-      { k: 'Estados', v: '09' },
-      { k: 'Sectores', v: '06' },
-      { k: 'Constituidos', v: '2020' },
-      { k: 'Base', v: 'Ciudad de México' },
-    ]}
   />
 
   <!-- 02 · Clientes -->
@@ -98,35 +91,6 @@ const jsonld = {
     alt="Aplicación de pasta en muro exterior del Hotel AVA Cancún"
     tag="Hotel AVA · Cancún, Quintana Roo"
   />
-
-  <!-- 05 · Obra destacada -->
-  <section class="section" aria-labelledby="feat-h">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="feat-h" class="display" data-reveal-text>Tres trabajos que resumen lo que hacemos.</h2>
-      </div>
-      <div class="feat-grid" data-reveal-group>
-        <FeatureCard
-          sector="02-hoteleria" slug="secrets-cancun_pintura-fachada-rappel"
-          alt="Técnico suspendido en rappel pintando la fachada del Hotel Secrets Cancún"
-          title="Trabajo en altura"
-          rows={[{ k: 'Ubicación', v: 'Quintana Roo' }, { k: 'Sector', v: 'Hotelería' }, { k: 'Técnica', v: 'Acceso por cuerda' }]}
-        />
-        <FeatureCard
-          sector="01-infraestructura-carretera" slug="michoacan_tren-de-pavimentacion"
-          alt="Tren completo de pavimentación con cuadrilla en Michoacán"
-          title="Obra carretera"
-          rows={[{ k: 'Ubicación', v: 'Michoacán' }, { k: 'Sector', v: 'Infraestructura' }, { k: 'Alcance', v: 'Base y carpeta' }]}
-        />
-        <FeatureCard
-          sector="02-hoteleria" slug="ava-restaurante_bar-terminado"
-          alt="Bar circular con plafón de madera del Restaurante Francés AVA"
-          title="Acabado fino"
-          rows={[{ k: 'Ubicación', v: 'Cancún, Q. Roo' }, { k: 'Sector', v: 'Hotelería' }, { k: 'Alcance', v: 'Barra y plafón' }]}
-        />
-      </div>
-    </div>
-  </section>
 
   <!-- 06 · Detrás de la obra -->
   <section class="section" aria-labelledby="proc-h">
@@ -197,11 +161,6 @@ const jsonld = {
 </BaseLayout>
 
 <style>
-  .feat-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--s3);
-  }
   .home-contact__intro,
   .home-contact__form {
     grid-column: span 4;
@@ -217,9 +176,6 @@ const jsonld = {
     align-items: flex-start;
   }
   @media (max-width: 900px) {
-    .feat-grid {
-      grid-template-columns: 1fr;
-    }
     .home-contact__intro,
     .home-contact__form {
       grid-column: 1;
