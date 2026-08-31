@@ -51,6 +51,10 @@
   --chamfer-lg:   40px;  /* corte grande para paneles del hero */
   --chamfer-photo: 56px; /* corte pronunciado de las fotos (solo sup-der) */
   --diagonal:     56px;  /* desplazamiento del corte diagonal de banda/hero */
+  /* Corte diagonal del panel naranja del header. Su pendiente iguala la de la
+     greca del logo LTA (Δx/Δy ≈ 16.13/24.92 = 0.6473): por cada px de alto del
+     header, el corte avanza 0.6473 px en horizontal. Con header de 78px → ~50px. */
+  --nav-diagonal: 50px;
 }
 
 @media (max-width: 900px) {
