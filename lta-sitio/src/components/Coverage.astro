@@ -59,6 +59,7 @@ for (const { id, nombre } of activos) {
   </div>
   <ul class="coverage__places mono">
     {lugares.map((l) => <li class="coverage__place">{l}</li>)}
+    <li class="coverage__place coverage__place--more">y más</li>
   </ul>
 </div>
 
@@ -194,6 +195,13 @@ for (const { id, nombre } of activos) {
     width: 10px;
     height: 10px;
     background: var(--red);
+  }
+  /* "y más": tono apagado y viñeta gris para leerse como cierre, no como estado. */
+  .coverage__place--more {
+    color: var(--concrete-4);
+  }
+  .coverage__place--more::before {
+    background: var(--concrete-4);
   }
   @media (max-width: 760px) {
     .coverage {
