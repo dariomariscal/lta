@@ -20,10 +20,20 @@ const activos = [
   { id: 'MXOAX', nombre: 'Oaxaca' },
   { id: 'MXCHP', nombre: 'Chiapas' },
   { id: 'MXSIN', nombre: 'Sinaloa' },
+  { id: 'MXVER', nombre: 'Veracruz' },
+  { id: 'MXCHH', nombre: 'Chihuahua' },
+  { id: 'MXSON', nombre: 'Sonora' },
+  { id: 'MXYUC', nombre: 'Yucatán' },
+  { id: 'MXQUE', nombre: 'Querétaro' },
+  { id: 'MXSLP', nombre: 'San Luis Potosí' },
+  { id: 'MXGUA', nombre: 'Guanajuato' },
+  { id: 'MXPUE', nombre: 'Puebla' },
+  { id: 'MXMOR', nombre: 'Morelos' },
 ];
 
-// Algunos lugares a destacar como texto (muestra, sin ser lista exhaustiva).
-const lugares = ['Ciudad de México', 'Quintana Roo', 'Michoacán', 'Oaxaca', 'Sinaloa'];
+// La lista de texto refleja todos los estados con obra (derivada de `activos`
+// para no mantener dos listas en paralelo).
+const lugares = activos.map((e) => e.nombre);
 
 // Marcamos los paths activos añadiéndoles data-activo, para que el CSS los pinte
 // en terracota.
@@ -49,7 +59,6 @@ for (const { id, nombre } of activos) {
   </div>
   <ul class="coverage__places mono">
     {lugares.map((l) => <li class="coverage__place">{l}</li>)}
-    <li class="coverage__place coverage__place--more">y más</li>
   </ul>
 </div>
 
@@ -161,10 +170,11 @@ for (const { id, nombre } of activos) {
     display: none;
   }
 
+  /* Dos columnas para que la lista completa de estados no se vea tan alta al
+     lado del mapa. `columns` reparte los <li> de arriba a abajo en cada columna. */
   .coverage__places {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s2);
+    columns: 2;
+    column-gap: var(--s4);
   }
   .coverage__place {
     font-size: 16px;
@@ -172,6 +182,8 @@ for (const { id, nombre } of activos) {
     color: var(--concrete-2);
     padding-left: var(--s3);
     position: relative;
+    margin-bottom: var(--s2);
+    break-inside: avoid;
   }
   /* Viñeta cuadrada terracota, guiño a los estados iluminados. */
   .coverage__place::before {
@@ -183,21 +195,34 @@ for (const { id, nombre } of activos) {
     height: 10px;
     background: var(--red);
   }
-  .coverage__place--more {
-    color: var(--concrete-4);
-  }
-  .coverage__place--more::before {
-    background: var(--concrete-4);
-  }
-
   @media (max-width: 760px) {
     .coverage {
       grid-template-columns: 1fr;
       gap: var(--s4);
     }
+    /* En móvil la lista se vuelve chips que fluyen: más compacta y escaneable
+       que una columna alta de viñetas. */
     .coverage__places {
-      flex-flow: row wrap;
-      gap: var(--s2) var(--s4);
+      columns: initial;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s2);
+    }
+    .coverage__place {
+      margin-bottom: 0;
+      padding: 6px 12px 6px 26px;
+      border: 1px solid var(--line-2);
+      background: var(--ink-3);
+      border-radius: 999px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .coverage__place::before {
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
     }
   }
 </style>
